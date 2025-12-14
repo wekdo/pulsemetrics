@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/24152979/README.md)
+[README.md](https://github.com/user-attachments/files/24154159/README.md)
 # PulseMetrics
 
 Modern SaaS analytics dashboard with marketing landing page and fully functional admin panel.
@@ -28,4 +28,4 @@ Modern SaaS analytics dashboard with marketing landing page and fully functional
 
 ---
 
-
+Portfolio project
