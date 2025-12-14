@@ -4,40 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PulseMetrics - Analytics that drive growth</title>
-  <meta name="description" content="Transform your data into actionable insights with PulseMetrics. Real-time analytics and beautiful dashboards for modern teams.">
-  
-  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2306b6d4'/%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cpath d='M15 50h15l10-30 15 60 10-30h15' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="PulseMetrics - Analytics Platform">
-  <meta property="og:description" content="Transform your data into actionable insights with real-time analytics.">
-  <meta property="og:type" content="website">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/recharts@2.10.3/umd/Recharts.js"></script>
-  <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
-  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    * { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #020617; }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #020617; margin: 0; }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  
   <script type="text/babel">
     const { useState, useMemo } = React;
     const { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } = Recharts;
-    const { Search, Bell, Users, TrendingUp, DollarSign, Activity, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Sun, Moon, Menu, X, Check, AlertCircle, Download, Plus, Home, BarChart2, FileText, MessageSquare, Settings, LogOut, Zap, Shield, Globe, ArrowRight, Star, Play, Send, Paperclip, MoreVertical, Calendar, Eye, Trash2, User, Lock, CreditCard, Camera, Save } = lucideReact;
 
     // Data
     const revenueData = [
@@ -88,7 +71,7 @@
       { source: 'Email', visits: 22100, bounce: 28 },
     ];
 
-    const companies = ['Acme Corp', 'TechFlow Inc', 'DataSphere', 'CloudNine', 'Quantum Labs', 'NexGen Solutions', 'ByteWave', 'InnovateTech', 'DigiPulse', 'SmartScale', 'FutureSoft', 'CodeCraft', 'NetPrime', 'SynergyHub', 'VisionAI'];
+    const companies = ['Acme Corp', 'TechFlow Inc', 'DataSphere', 'CloudNine', 'Quantum Labs', 'NexGen Solutions', 'ByteWave', 'InnovateTech', 'DigiPulse', 'SmartScale'];
     const statuses = ['Active', 'Pending', 'Churned', 'Trial'];
     const plans = ['Enterprise', 'Pro', 'Starter', 'Free'];
 
@@ -99,7 +82,6 @@
       plan: plans[i % plans.length],
       mrr: 500 + (i * 317) % 14500,
       status: statuses[i % statuses.length],
-      lastActive: `${(i % 28) + 1}/12/2024`,
       users: 5 + (i * 13) % 145,
     }));
 
@@ -108,15 +90,12 @@
       { id: 2, name: 'User Growth Analysis', type: 'Analytics', date: '2024-11-28', size: '1.8 MB', status: 'Ready' },
       { id: 3, name: 'Customer Churn Report', type: 'Customer', date: '2024-11-25', size: '3.1 MB', status: 'Ready' },
       { id: 4, name: 'Marketing Campaign Results', type: 'Marketing', date: '2024-11-20', size: '4.2 MB', status: 'Ready' },
-      { id: 5, name: 'Product Usage Metrics', type: 'Product', date: '2024-11-15', size: '2.9 MB', status: 'Ready' },
-      { id: 6, name: 'Monthly KPI Dashboard', type: 'Executive', date: '2024-11-10', size: '1.5 MB', status: 'Processing' },
     ];
 
     const messagesData = [
       { id: 1, name: 'Sarah Chen', avatar: 'SC', role: 'Enterprise Client', lastMessage: 'Thanks for the quick response!', time: '2m ago', unread: 2, online: true },
       { id: 2, name: 'Mike Johnson', avatar: 'MJ', role: 'Pro User', lastMessage: 'Can we schedule a call?', time: '15m ago', unread: 0, online: true },
       { id: 3, name: 'Emily Davis', avatar: 'ED', role: 'Support Team', lastMessage: 'Ticket resolved successfully.', time: '1h ago', unread: 1, online: false },
-      { id: 4, name: 'Alex Thompson', avatar: 'AT', role: 'Sales Lead', lastMessage: 'They signed the contract!', time: '2h ago', unread: 0, online: true },
     ];
 
     const chatMessages = [
@@ -127,40 +106,38 @@
       { id: 5, sender: 'them', text: 'Thanks for the quick response!', time: '10:36 AM' },
     ];
 
-    // Logo Component
-    const Logo = ({ size = 6 }) => (
-      <svg viewBox="0 0 24 24" className={`w-${size} h-${size}`} fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    // Logo
+    const Logo = () => (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 12h4l3-9 4 18 3-9h4" />
       </svg>
     );
 
     // Landing Page
     const LandingPage = ({ onEnterDashboard, isDark, toggleTheme }) => (
-      <div className={`min-h-screen transition-colors duration-500 ${isDark ? 'bg-slate-950 text-white' : 'bg-white text-slate-900'}`}>
+      <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-white' : 'bg-white text-slate-900'}`}>
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className={`absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-cyan-500' : 'bg-cyan-300'}`} />
           <div className={`absolute bottom-1/4 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-violet-500' : 'bg-violet-300'}`} />
         </div>
 
         <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-white/80 border-slate-200'} border-b`}>
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center"><Logo /></div>
-                <span className="text-xl font-bold bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent">PulseMetrics</span>
-              </div>
-              <div className="hidden md:flex items-center gap-8">
-                <a href="#features" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Features</a>
-                <a href="#pricing" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Pricing</a>
-              </div>
-              <div className="flex items-center gap-4">
-                <button onClick={toggleTheme} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>
-                  {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button>
-                <button onClick={onEnterDashboard} className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-cyan-500/25">
-                  Try Dashboard <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center"><Logo /></div>
+              <span className="text-xl font-bold bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent">PulseMetrics</span>
+            </div>
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#features" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Features</a>
+              <a href="#pricing" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Pricing</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <button onClick={toggleTheme} className={`p-2 rounded-lg text-xl ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>
+                {isDark ? '☀️' : '🌙'}
+              </button>
+              <button onClick={onEnterDashboard} className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium hover:shadow-lg">
+                Try Dashboard →
+              </button>
             </div>
           </div>
         </nav>
@@ -169,7 +146,7 @@
           <div className="max-w-7xl mx-auto">
             <div className="max-w-4xl mx-auto text-center">
               <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 ${isDark ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-cyan-50 text-cyan-600 border border-cyan-200'}`}>
-                <Zap className="w-4 h-4" /> New: AI-Powered Insights
+                ⚡ New: AI-Powered Insights
               </div>
               <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
                 Analytics that<span className="bg-gradient-to-r from-cyan-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent"> drive growth</span>
@@ -177,15 +154,15 @@
               <p className={`text-xl md:text-2xl mb-10 max-w-2xl mx-auto ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 Transform your data into actionable insights with real-time analytics and beautiful dashboards.
               </p>
-              <button onClick={onEnterDashboard} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transition-all flex items-center justify-center gap-2 mx-auto">
-                <Play className="w-5 h-5" /> Start Free Trial
+              <button onClick={onEnterDashboard} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transition-all">
+                ▶ Start Free Trial
               </button>
               <div className="flex items-center justify-center gap-6 mt-10">
                 <div className="flex -space-x-3">
                   {[1,2,3,4,5].map(i => <div key={i} className={`w-10 h-10 rounded-full border-2 ${isDark ? 'border-slate-950' : 'border-white'} bg-gradient-to-br from-slate-400 to-slate-600`} />)}
                 </div>
                 <div className="text-left">
-                  <div className="flex items-center gap-1">{[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}</div>
+                  <div className="flex items-center gap-1 text-amber-400">★★★★★</div>
                   <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Trusted by 10,000+ teams</p>
                 </div>
               </div>
@@ -199,7 +176,6 @@
                     <div className="w-3 h-3 rounded-full bg-amber-500" />
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
-                  <div className={`flex-1 text-center text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>app.pulsemetrics.io</div>
                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -209,7 +185,7 @@
                       { label: 'Conversion', value: '4.28%', change: '+2.1%' },
                       { label: 'Avg. Session', value: '4m 32s', change: '+15.3%' },
                     ].map((stat, i) => (
-                      <div key={i} className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50' : 'bg-white'} border ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+                      <div key={i} className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200'} border`}>
                         <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</p>
                         <p className="text-xl font-bold mt-1">{stat.value}</p>
                         <p className="text-sm mt-1 text-emerald-500">{stat.change}</p>
@@ -241,17 +217,15 @@
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { icon: TrendingUp, title: 'Real-time Analytics', desc: 'Track metrics as they happen.' },
-                { icon: Shield, title: 'Enterprise Security', desc: 'Bank-level encryption, SOC2 & GDPR.' },
-                { icon: Globe, title: 'Global CDN', desc: 'Fast from 200+ edge locations.' },
-                { icon: Users, title: 'Team Collaboration', desc: 'Share and collaborate in real-time.' },
-                { icon: Zap, title: 'AI Insights', desc: 'Anomaly detection and predictions.' },
-                { icon: BarChart2, title: 'Custom Reports', desc: 'Drag-and-drop report builder.' },
+                { icon: '📈', title: 'Real-time Analytics', desc: 'Track metrics as they happen.' },
+                { icon: '🔒', title: 'Enterprise Security', desc: 'Bank-level encryption, SOC2 & GDPR.' },
+                { icon: '🌍', title: 'Global CDN', desc: 'Fast from 200+ edge locations.' },
+                { icon: '👥', title: 'Team Collaboration', desc: 'Share and collaborate in real-time.' },
+                { icon: '⚡', title: 'AI Insights', desc: 'Anomaly detection and predictions.' },
+                { icon: '📊', title: 'Custom Reports', desc: 'Drag-and-drop report builder.' },
               ].map((f, i) => (
                 <div key={i} className={`group p-8 rounded-2xl border transition-all hover:-translate-y-2 ${isDark ? 'bg-slate-900/50 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 hover:shadow-xl'}`}>
-                  <div className="w-14 h-14 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <f.icon className="w-7 h-7 text-cyan-500" />
-                  </div>
+                  <div className="text-4xl mb-6">{f.icon}</div>
                   <h3 className="text-xl font-semibold mb-3">{f.title}</h3>
                   <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>{f.desc}</p>
                 </div>
@@ -276,7 +250,7 @@
                   <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
                   <div className="flex items-baseline gap-1 mb-6"><span className="text-4xl font-bold">{plan.price}</span>{plan.price !== 'Custom' && <span className={isDark ? 'text-slate-400' : 'text-slate-600'}>/mo</span>}</div>
                   <ul className="space-y-3 mb-8">
-                    {plan.features.map((f, j) => <li key={j} className="flex items-center gap-3"><Check className="w-5 h-5 text-cyan-500" /><span className={isDark ? 'text-slate-300' : 'text-slate-600'}>{f}</span></li>)}
+                    {plan.features.map((f, j) => <li key={j} className="flex items-center gap-3"><span className="text-cyan-500">✓</span><span className={isDark ? 'text-slate-300' : 'text-slate-600'}>{f}</span></li>)}
                   </ul>
                   <button onClick={onEnterDashboard} className={`w-full py-3 rounded-xl font-medium ${plan.popular ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>Get Started</button>
                 </div>
@@ -293,7 +267,7 @@
               </div>
               <span className="font-semibold">PulseMetrics</span>
             </div>
-            <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>© 2025 PulseMetrics. All rights reserved.</p>
+            <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>© 2025 PulseMetrics</p>
           </div>
         </footer>
       </div>
@@ -302,10 +276,10 @@
     // Dashboard Tabs
     const OverviewTab = ({ isDark, dateRange, setDateRange }) => {
       const stats = [
-        { label: 'Total Revenue', value: '$845,231', change: '+12.5%', icon: DollarSign },
-        { label: 'Active Users', value: '24,521', change: '+8.2%', icon: Users },
-        { label: 'Conversion Rate', value: '4.28%', change: '+2.1%', icon: TrendingUp },
-        { label: 'Churn Rate', value: '2.4%', change: '-0.3%', icon: Activity },
+        { label: 'Total Revenue', value: '$845,231', change: '+12.5%', icon: '💰' },
+        { label: 'Active Users', value: '24,521', change: '+8.2%', icon: '👥' },
+        { label: 'Conversion Rate', value: '4.28%', change: '+2.1%', icon: '📈' },
+        { label: 'Churn Rate', value: '2.4%', change: '-0.3%', icon: '📉' },
       ];
       const filteredData = useMemo(() => revenueData.slice(-(dateRange === '6m' ? 6 : dateRange === '3m' ? 3 : 12)), [dateRange]);
 
@@ -317,12 +291,12 @@
               <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Here's what's happening today.</p>
             </div>
             <div className="flex items-center gap-3">
-              <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className={`px-4 py-2 rounded-xl border outline-none ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+              <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className={`px-4 py-2 rounded-xl border outline-none ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}>
                 <option value="3m">Last 3 months</option>
                 <option value="6m">Last 6 months</option>
                 <option value="12m">Last 12 months</option>
               </select>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium"><Download className="w-4 h-4" /> Export</button>
+              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">📥 Export</button>
             </div>
           </div>
 
@@ -330,7 +304,7 @@
             {stats.map((stat, i) => (
               <div key={i} className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}><stat.icon className="w-6 h-6 text-cyan-500" /></div>
+                  <div className={`p-3 rounded-xl text-2xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>{stat.icon}</div>
                   <span className="text-sm font-medium text-emerald-500">{stat.change}</span>
                 </div>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{stat.label}</p>
@@ -347,7 +321,7 @@
                   <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
                   <XAxis dataKey="month" stroke={isDark ? '#64748b' : '#94a3b8'} />
                   <YAxis stroke={isDark ? '#64748b' : '#94a3b8'} />
-                  <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px' }} />
+                  <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
                   <Line type="monotone" dataKey="revenue" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 4 }} />
                   <Line type="monotone" dataKey="users" stroke="#8b5cf6" strokeWidth={3} dot={{ fill: '#8b5cf6', r: 4 }} />
                 </LineChart>
@@ -356,7 +330,7 @@
             <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
               <h3 className="font-semibold text-lg mb-6">Revenue by Plan</h3>
               <ResponsiveContainer width="100%" height={200}>
-                <PieChart><Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value">{pieData.map((e, i) => <Cell key={i} fill={e.color} />)}</Pie></PieChart>
+                <PieChart><Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value">{pieData.map((e, i) => <Cell key={i} fill={e.color} />)}</Pie><Tooltip /></PieChart>
               </ResponsiveContainer>
               <div className="grid grid-cols-2 gap-2 mt-4">
                 {pieData.map((item, i) => (
@@ -376,7 +350,7 @@
                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
                 <XAxis type="number" stroke={isDark ? '#64748b' : '#94a3b8'} />
                 <YAxis dataKey="channel" type="category" stroke={isDark ? '#64748b' : '#94a3b8'} width={80} />
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
                 <Bar dataKey="leads" fill="#06b6d4" radius={[0, 4, 4, 0]} />
                 <Bar dataKey="converted" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -401,7 +375,7 @@
                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
                 <XAxis dataKey="month" stroke={isDark ? '#64748b' : '#94a3b8'} />
                 <YAxis stroke={isDark ? '#64748b' : '#94a3b8'} />
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
                 <Area type="monotone" dataKey="sessions" stroke="#8b5cf6" fill="url(#colorS)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -426,7 +400,7 @@
               </thead>
               <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
                 {trafficData.map((r, i) => (
-                  <tr key={i}>
+                  <tr key={i} className={isDark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}>
                     <td className="px-6 py-4 font-medium">{r.source}</td>
                     <td className="px-6 py-4">{r.visits.toLocaleString()}</td>
                     <td className="px-6 py-4">{r.bounce}%</td>
@@ -465,10 +439,13 @@
           <div className="mb-8"><h1 className="text-2xl font-bold">Customers</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Manage your customers.</p></div>
           <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
             <div className={`p-6 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'} flex flex-wrap items-center gap-3`}>
-              <div className="relative"><Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? 'text-slate-500' : 'text-slate-400'}`} /><input type="text" placeholder="Search..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className={`pl-9 pr-4 py-2 rounded-lg w-48 text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>
-              <select value={statusF} onChange={(e) => { setStatusF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border`}><option value="All">All Status</option>{statuses.map(s => <option key={s} value={s}>{s}</option>)}</select>
-              <select value={planF} onChange={(e) => { setPlanF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border`}><option value="All">All Plans</option>{plans.map(p => <option key={p} value={p}>{p}</option>)}</select>
-              <button className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-medium"><Plus className="w-4 h-4" /> Add</button>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
+                <input type="text" placeholder="Search..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className={`pl-9 pr-4 py-2 rounded-lg w-48 text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} />
+              </div>
+              <select value={statusF} onChange={(e) => { setStatusF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`}><option value="All">All Status</option>{statuses.map(s => <option key={s} value={s}>{s}</option>)}</select>
+              <select value={planF} onChange={(e) => { setPlanF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`}><option value="All">All Plans</option>{plans.map(p => <option key={p} value={p}>{p}</option>)}</select>
+              <button className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-medium">+ Add</button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -492,9 +469,9 @@
             <div className={`p-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'} flex items-center justify-between`}>
               <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Showing {(page-1)*perPage+1}-{Math.min(page*perPage, filtered.length)} of {filtered.length}</p>
               <div className="flex gap-2">
-                <button onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1} className={`p-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}><ChevronLeft className="w-5 h-5" /></button>
+                <button onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1} className={`px-3 py-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>←</button>
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map(n => <button key={n} onClick={() => setPage(n)} className={`w-10 h-10 rounded-lg font-medium ${page === n ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>{n}</button>)}
-                <button onClick={() => setPage(p => Math.min(totalPages, p+1))} disabled={page === totalPages} className={`p-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}><ChevronRight className="w-5 h-5" /></button>
+                <button onClick={() => setPage(p => Math.min(totalPages, p+1))} disabled={page === totalPages} className={`px-3 py-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>→</button>
               </div>
             </div>
           </div>
@@ -509,29 +486,29 @@
         <>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div><h1 className="text-2xl font-bold">Reports</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Generate and download reports.</p></div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium"><Plus className="w-4 h-4" /> Create</button>
+            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">+ Create</button>
           </div>
           <div className="flex gap-2 mb-6 flex-wrap">
-            {['All', 'Financial', 'Analytics', 'Customer', 'Marketing', 'Product'].map(t => <button key={t} onClick={() => setType(t)} className={`px-4 py-2 rounded-lg text-sm font-medium ${type === t ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>{t}</button>)}
+            {['All', 'Financial', 'Analytics', 'Customer', 'Marketing'].map(t => <button key={t} onClick={() => setType(t)} className={`px-4 py-2 rounded-lg text-sm font-medium ${type === t ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>{t}</button>)}
           </div>
           <div className="grid gap-4">
             {filtered.map(r => (
               <div key={r.id} className={`p-6 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
                 <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}><FileText className="w-6 h-6 text-cyan-500" /></div>
+                  <div className={`p-3 rounded-xl text-2xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>📄</div>
                   <div>
                     <h3 className="font-semibold">{r.name}</h3>
                     <div className={`flex items-center gap-4 mt-1 text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {r.date}</span>
+                      <span>📅 {r.date}</span>
                       <span>{r.size}</span>
                       <span className={`px-2 py-0.5 rounded-full text-xs ${r.status === 'Ready' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>{r.status}</span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}><Eye className="w-5 h-5" /></button>
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}><Download className="w-5 h-5" /></button>
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}><Trash2 className="w-5 h-5 text-red-500" /></button>
+                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>👁</button>
+                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>📥</button>
+                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>🗑</button>
                 </div>
               </div>
             ))}
@@ -583,8 +560,8 @@
                   ))}
                 </div>
                 <div className={`p-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'} flex items-center gap-3`}>
-                  <input type="text" value={newMsg} onChange={(e) => setNewMsg(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && send()} placeholder="Type a message..." className={`flex-1 px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border outline-none`} />
-                  <button onClick={send} className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 text-white"><Send className="w-5 h-5" /></button>
+                  <input type="text" value={newMsg} onChange={(e) => setNewMsg(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && send()} placeholder="Type a message..." className={`flex-1 px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} />
+                  <button onClick={send} className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 text-white">➤</button>
                 </div>
               </div>
             </div>
@@ -601,9 +578,9 @@
           <div className="mb-8"><h1 className="text-2xl font-bold">Settings</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Manage your account.</p></div>
           <div className="flex flex-col lg:flex-row gap-6">
             <div className={`lg:w-64 p-4 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-              {[{ id: 'profile', label: 'Profile', icon: User }, { id: 'security', label: 'Security', icon: Lock }, { id: 'notifications', label: 'Notifications', icon: Bell }, { id: 'billing', label: 'Billing', icon: CreditCard }].map(s => (
-                <button key={s.id} onClick={() => setSection(s.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 ${section === s.id ? 'bg-gradient-to-r from-cyan-500/10 to-violet-500/10 text-cyan-500' : isDark ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}>
-                  <s.icon className="w-5 h-5" /><span className="font-medium">{s.label}</span>
+              {[{ id: 'profile', label: '👤 Profile' }, { id: 'security', label: '🔒 Security' }, { id: 'notifications', label: '🔔 Notifications' }, { id: 'billing', label: '💳 Billing' }].map(s => (
+                <button key={s.id} onClick={() => setSection(s.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 text-left ${section === s.id ? 'bg-gradient-to-r from-cyan-500/10 to-violet-500/10 text-cyan-500' : isDark ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}>
+                  <span className="font-medium">{s.label}</span>
                 </button>
               ))}
             </div>
@@ -616,16 +593,16 @@
                     <div><h3 className="font-semibold">John Doe</h3><p className={isDark ? 'text-slate-400' : 'text-slate-500'}>Admin</p></div>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
-                    {['First Name', 'Last Name', 'Email', 'Phone'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="text" defaultValue={['John', 'Doe', 'john@pulsemetrics.io', '+1 555-1234'][i]} className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
+                    {['First Name', 'Last Name', 'Email', 'Phone'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="text" defaultValue={['John', 'Doe', 'john@pulsemetrics.io', '+1 555-1234'][i]} className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
                   </div>
-                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium"><Save className="w-4 h-4" /> Save</button>
+                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">💾 Save</button>
                 </div>
               )}
               {section === 'security' && (
                 <div className="space-y-6">
                   <h2 className="text-lg font-semibold">Security Settings</h2>
-                  {['Current Password', 'New Password', 'Confirm Password'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="password" placeholder="••••••••" className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
-                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium"><Save className="w-4 h-4" /> Update</button>
+                  {['Current Password', 'New Password', 'Confirm Password'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="password" placeholder="••••••••" className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
+                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">💾 Update</button>
                 </div>
               )}
               {section === 'notifications' && (
@@ -634,7 +611,7 @@
                   {[{ key: 'email', label: 'Email Notifications' }, { key: 'push', label: 'Push Notifications' }, { key: 'weekly', label: 'Weekly Digest' }].map(n => (
                     <div key={n.key} className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'} flex items-center justify-between`}>
                       <span className="font-medium">{n.label}</span>
-                      <button onClick={() => setNotifs({ ...notifs, [n.key]: !notifs[n.key] })} className={`w-12 h-6 rounded-full ${notifs[n.key] ? 'bg-cyan-500' : isDark ? 'bg-slate-700' : 'bg-slate-300'}`}><div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs[n.key] ? 'translate-x-6' : 'translate-x-0.5'}`} /></button>
+                      <button onClick={() => setNotifs({ ...notifs, [n.key]: !notifs[n.key] })} className={`w-12 h-6 rounded-full transition-colors ${notifs[n.key] ? 'bg-cyan-500' : isDark ? 'bg-slate-700' : 'bg-slate-300'}`}><div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs[n.key] ? 'translate-x-6' : 'translate-x-0.5'}`} /></button>
                     </div>
                   ))}
                 </div>
@@ -647,7 +624,7 @@
                     <p className="text-3xl font-bold">$49<span className={`text-lg font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/month</span></p>
                   </div>
                   <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'} flex items-center gap-4`}>
-                    <CreditCard className="w-8 h-8" /><div><p className="font-medium">•••• 4242</p><p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Expires 12/26</p></div>
+                    <span className="text-2xl">💳</span><div><p className="font-medium">•••• 4242</p><p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Expires 12/26</p></div>
                   </div>
                   <button className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">Upgrade Plan</button>
                 </div>
@@ -666,12 +643,12 @@
       const [dateRange, setDateRange] = useState('12m');
 
       const navItems = [
-        { icon: Home, label: 'Overview', id: 'overview' },
-        { icon: BarChart2, label: 'Analytics', id: 'analytics' },
-        { icon: Users, label: 'Customers', id: 'customers' },
-        { icon: FileText, label: 'Reports', id: 'reports' },
-        { icon: MessageSquare, label: 'Messages', id: 'messages' },
-        { icon: Settings, label: 'Settings', id: 'settings' },
+        { icon: '🏠', label: 'Overview', id: 'overview' },
+        { icon: '📊', label: 'Analytics', id: 'analytics' },
+        { icon: '👥', label: 'Customers', id: 'customers' },
+        { icon: '📄', label: 'Reports', id: 'reports' },
+        { icon: '💬', label: 'Messages', id: 'messages' },
+        { icon: '⚙️', label: 'Settings', id: 'settings' },
       ];
 
       return (
@@ -684,13 +661,13 @@
             <nav className="mt-6 px-3">
               {navItems.map(n => (
                 <button key={n.id} onClick={() => setTab(n.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 ${tab === n.id ? 'bg-gradient-to-r from-cyan-500/10 to-violet-500/10 text-cyan-500' : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}>
-                  <n.icon className="w-5 h-5 flex-shrink-0" />{sidebar && <span className="font-medium">{n.label}</span>}
+                  <span className="text-xl flex-shrink-0">{n.icon}</span>{sidebar && <span className="font-medium">{n.label}</span>}
                 </button>
               ))}
             </nav>
             <div className="absolute bottom-4 left-0 right-0 px-3">
               <button onClick={onBack} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}>
-                <LogOut className="w-5 h-5 flex-shrink-0" />{sidebar && <span className="font-medium">Back to Site</span>}
+                <span className="text-xl flex-shrink-0">🚪</span>{sidebar && <span className="font-medium">Back to Site</span>}
               </button>
             </div>
           </aside>
@@ -698,17 +675,17 @@
           <main className={`transition-all duration-300 ${sidebar ? 'ml-64' : 'ml-20'}`}>
             <header className={`sticky top-0 z-30 backdrop-blur-xl ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50/80 border-slate-200'} border-b`}>
               <div className="flex items-center justify-between px-6 py-4">
-                <button onClick={() => setSidebar(!sidebar)} className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-200'}`}><Menu className="w-5 h-5" /></button>
+                <button onClick={() => setSidebar(!sidebar)} className={`p-2 rounded-lg text-xl ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-200'}`}>☰</button>
                 <div className="flex items-center gap-3">
-                  <button onClick={toggleTheme} className={`p-2.5 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}>{isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
+                  <button onClick={toggleTheme} className={`p-2.5 rounded-xl text-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}>{isDark ? '☀️' : '🌙'}</button>
                   <div className="relative">
-                    <button onClick={() => setNotifs(!notifs)} className={`p-2.5 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-white'} relative`}><Bell className="w-5 h-5" /><span className="absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-500 rounded-full" /></button>
+                    <button onClick={() => setNotifs(!notifs)} className={`p-2.5 rounded-xl text-xl ${isDark ? 'bg-slate-800' : 'bg-white'} relative`}>🔔<span className="absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-500 rounded-full" /></button>
                     {notifs && (
                       <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl border shadow-xl ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
                         <div className={`p-4 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'}`}><h3 className="font-semibold">Notifications</h3></div>
-                        {[{ type: 'success', msg: 'New customer signed up', time: '2m' }, { type: 'warning', msg: 'Usage limit approaching', time: '15m' }].map((n, i) => (
+                        {[{ icon: '✅', msg: 'New customer signed up', time: '2m' }, { icon: '⚠️', msg: 'Usage limit approaching', time: '15m' }].map((n, i) => (
                           <div key={i} className={`p-4 border-b ${isDark ? 'border-slate-800' : 'border-slate-100'} flex items-start gap-3`}>
-                            {n.type === 'success' ? <Check className="w-5 h-5 text-emerald-500" /> : <AlertCircle className="w-5 h-5 text-amber-500" />}
+                            <span className="text-xl">{n.icon}</span>
                             <div><p className="text-sm">{n.msg}</p><p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{n.time} ago</p></div>
                           </div>
                         ))}
