@@ -3,726 +3,458 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PulseMetrics - Analytics that drive growth</title>
+  <title>PulseMetrics - Analytics Dashboard</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2306b6d4'/%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cpath d='M15 50h15l10-30 15 60 10-30h15' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/recharts@2.10.3/umd/Recharts.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    * { font-family: 'Inter', system-ui, sans-serif; }
-    body { background: #020617; margin: 0; }
+    *{font-family:'Inter',system-ui,sans-serif;box-sizing:border-box}
+    .gradient-text{background:linear-gradient(to right,#06b6d4,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .gradient-bg{background:linear-gradient(to right,#06b6d4,#8b5cf6)}
+    .gradient-box{background:linear-gradient(135deg,#06b6d4,#8b5cf6)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.625rem 1.25rem;border-radius:0.75rem;font-weight:500;cursor:pointer;transition:all 0.2s;border:none;outline:none}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{background:linear-gradient(to right,#06b6d4,#8b5cf6);color:white}
+    .btn-secondary{background:#1e293b;color:white}
+    .btn-secondary:hover{background:#334155}
+    .card{background:rgba(15,23,42,0.5);border:1px solid #1e293b;border-radius:1rem}
+    .sidebar-item{width:100%;display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border-radius:0.75rem;color:#94a3b8;cursor:pointer;transition:all 0.2s;border:none;background:transparent;text-align:left;font-size:0.875rem}
+    .sidebar-item:hover{background:#1e293b;color:white}
+    .sidebar-item.active{background:linear-gradient(to right,rgba(6,182,212,0.1),rgba(139,92,246,0.1));color:#06b6d4}
+    .input{width:100%;padding:0.5rem 1rem;border-radius:0.75rem;background:#1e293b;border:1px solid #334155;color:white;outline:none}
+    .input:focus{border-color:#06b6d4}
   </style>
 </head>
-<body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useMemo } = React;
-    const { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } = Recharts;
+<body class="bg-slate-950 text-white min-h-screen">
 
-    // Data
-    const revenueData = [
-      { month: 'Jan', revenue: 45000, users: 1200, sessions: 18500 },
-      { month: 'Feb', revenue: 52000, users: 1400, sessions: 21000 },
-      { month: 'Mar', revenue: 48000, users: 1350, sessions: 19800 },
-      { month: 'Apr', revenue: 61000, users: 1800, sessions: 26500 },
-      { month: 'May', revenue: 55000, users: 1650, sessions: 24200 },
-      { month: 'Jun', revenue: 72000, users: 2100, sessions: 31000 },
-      { month: 'Jul', revenue: 68000, users: 1950, sessions: 28700 },
-      { month: 'Aug', revenue: 81000, users: 2400, sessions: 35200 },
-      { month: 'Sep', revenue: 79000, users: 2300, sessions: 33800 },
-      { month: 'Oct', revenue: 92000, users: 2800, sessions: 41500 },
-      { month: 'Nov', revenue: 88000, users: 2650, sessions: 39200 },
-      { month: 'Dec', revenue: 105000, users: 3200, sessions: 47800 },
-    ];
+<!-- LANDING -->
+<div id="landing">
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-cyan-500 opacity-20 blur-[100px]"></div>
+    <div class="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-violet-500 opacity-20 blur-[100px]"></div>
+  </div>
 
-    const pieData = [
-      { name: 'Enterprise', value: 45, color: '#06b6d4' },
-      { name: 'Pro', value: 30, color: '#8b5cf6' },
-      { name: 'Starter', value: 15, color: '#f59e0b' },
-      { name: 'Free', value: 10, color: '#64748b' },
-    ];
-
-    const channelData = [
-      { channel: 'Organic', leads: 3420, converted: 892 },
-      { channel: 'Paid Ads', leads: 2180, converted: 654 },
-      { channel: 'Referral', leads: 1560, converted: 512 },
-      { channel: 'Social', leads: 980, converted: 245 },
-      { channel: 'Email', leads: 1240, converted: 428 },
-    ];
-
-    const radarData = [
-      { metric: 'Engagement', value: 85 },
-      { metric: 'Retention', value: 72 },
-      { metric: 'Satisfaction', value: 91 },
-      { metric: 'Growth', value: 68 },
-      { metric: 'Revenue', value: 79 },
-      { metric: 'Efficiency', value: 84 },
-    ];
-
-    const trafficData = [
-      { source: 'Direct', visits: 45200, bounce: 32 },
-      { source: 'Google', visits: 38400, bounce: 41 },
-      { source: 'Facebook', visits: 12800, bounce: 55 },
-      { source: 'Twitter', visits: 8600, bounce: 48 },
-      { source: 'LinkedIn', visits: 15200, bounce: 38 },
-      { source: 'Email', visits: 22100, bounce: 28 },
-    ];
-
-    const companies = ['Acme Corp', 'TechFlow Inc', 'DataSphere', 'CloudNine', 'Quantum Labs', 'NexGen Solutions', 'ByteWave', 'InnovateTech', 'DigiPulse', 'SmartScale'];
-    const statuses = ['Active', 'Pending', 'Churned', 'Trial'];
-    const plans = ['Enterprise', 'Pro', 'Starter', 'Free'];
-
-    const tableData = Array.from({ length: 50 }, (_, i) => ({
-      id: i + 1,
-      company: companies[i % companies.length],
-      email: `contact@${companies[i % companies.length].toLowerCase().replace(/\s+/g, '')}.com`,
-      plan: plans[i % plans.length],
-      mrr: 500 + (i * 317) % 14500,
-      status: statuses[i % statuses.length],
-      users: 5 + (i * 13) % 145,
-    }));
-
-    const reportsData = [
-      { id: 1, name: 'Q4 2024 Revenue Report', type: 'Financial', date: '2024-12-01', size: '2.4 MB', status: 'Ready' },
-      { id: 2, name: 'User Growth Analysis', type: 'Analytics', date: '2024-11-28', size: '1.8 MB', status: 'Ready' },
-      { id: 3, name: 'Customer Churn Report', type: 'Customer', date: '2024-11-25', size: '3.1 MB', status: 'Ready' },
-      { id: 4, name: 'Marketing Campaign Results', type: 'Marketing', date: '2024-11-20', size: '4.2 MB', status: 'Ready' },
-    ];
-
-    const messagesData = [
-      { id: 1, name: 'Sarah Chen', avatar: 'SC', role: 'Enterprise Client', lastMessage: 'Thanks for the quick response!', time: '2m ago', unread: 2, online: true },
-      { id: 2, name: 'Mike Johnson', avatar: 'MJ', role: 'Pro User', lastMessage: 'Can we schedule a call?', time: '15m ago', unread: 0, online: true },
-      { id: 3, name: 'Emily Davis', avatar: 'ED', role: 'Support Team', lastMessage: 'Ticket resolved successfully.', time: '1h ago', unread: 1, online: false },
-    ];
-
-    const chatMessages = [
-      { id: 1, sender: 'them', text: 'Hi! Question about API rate limits.', time: '10:30 AM' },
-      { id: 2, sender: 'me', text: 'Of course! What would you like to know?', time: '10:32 AM' },
-      { id: 3, sender: 'them', text: 'What are the limits for Enterprise tier?', time: '10:33 AM' },
-      { id: 4, sender: 'me', text: 'Enterprise includes 10,000 requests/min with burst up to 15,000.', time: '10:35 AM' },
-      { id: 5, sender: 'them', text: 'Thanks for the quick response!', time: '10:36 AM' },
-    ];
-
-    // Logo
-    const Logo = () => (
-      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 12h4l3-9 4 18 3-9h4" />
-      </svg>
-    );
-
-    // Landing Page
-    const LandingPage = ({ onEnterDashboard, isDark, toggleTheme }) => (
-      <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-white' : 'bg-white text-slate-900'}`}>
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className={`absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-cyan-500' : 'bg-cyan-300'}`} />
-          <div className={`absolute bottom-1/4 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-violet-500' : 'bg-violet-300'}`} />
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl gradient-box flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="white" stroke-width="2.5"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
         </div>
-
-        <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-white/80 border-slate-200'} border-b`}>
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center"><Logo /></div>
-              <span className="text-xl font-bold bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent">PulseMetrics</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Features</a>
-              <a href="#pricing" className={`text-sm font-medium hover:text-cyan-500 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Pricing</a>
-            </div>
-            <div className="flex items-center gap-4">
-              <button onClick={toggleTheme} className={`p-2 rounded-lg text-xl ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>
-                {isDark ? '☀️' : '🌙'}
-              </button>
-              <button onClick={onEnterDashboard} className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium hover:shadow-lg">
-                Try Dashboard →
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <section className="relative pt-32 pb-20 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 ${isDark ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-cyan-50 text-cyan-600 border border-cyan-200'}`}>
-                ⚡ New: AI-Powered Insights
-              </div>
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-                Analytics that<span className="bg-gradient-to-r from-cyan-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent"> drive growth</span>
-              </h1>
-              <p className={`text-xl md:text-2xl mb-10 max-w-2xl mx-auto ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                Transform your data into actionable insights with real-time analytics and beautiful dashboards.
-              </p>
-              <button onClick={onEnterDashboard} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transition-all">
-                ▶ Start Free Trial
-              </button>
-              <div className="flex items-center justify-center gap-6 mt-10">
-                <div className="flex -space-x-3">
-                  {[1,2,3,4,5].map(i => <div key={i} className={`w-10 h-10 rounded-full border-2 ${isDark ? 'border-slate-950' : 'border-white'} bg-gradient-to-br from-slate-400 to-slate-600`} />)}
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-1 text-amber-400">★★★★★</div>
-                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Trusted by 10,000+ teams</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-20">
-              <div className={`rounded-2xl overflow-hidden border shadow-2xl ${isDark ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-slate-50'}`}>
-                <div className={`flex items-center gap-2 px-4 py-3 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-amber-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    {[
-                      { label: 'Total Revenue', value: '$845,231', change: '+12.5%' },
-                      { label: 'Active Users', value: '24,521', change: '+8.2%' },
-                      { label: 'Conversion', value: '4.28%', change: '+2.1%' },
-                      { label: 'Avg. Session', value: '4m 32s', change: '+15.3%' },
-                    ].map((stat, i) => (
-                      <div key={i} className={`p-4 rounded-xl ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-slate-200'} border`}>
-                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</p>
-                        <p className="text-xl font-bold mt-1">{stat.value}</p>
-                        <p className="text-sm mt-1 text-emerald-500">{stat.change}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={revenueData.slice(0, 6)}>
-                        <defs>
-                          <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/><stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <Area type="monotone" dataKey="revenue" stroke="#06b6d4" strokeWidth={2} fill="url(#colorRev)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="features" className="py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Everything you need to<span className="bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent"> scale</span></h2>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { icon: '📈', title: 'Real-time Analytics', desc: 'Track metrics as they happen.' },
-                { icon: '🔒', title: 'Enterprise Security', desc: 'Bank-level encryption, SOC2 & GDPR.' },
-                { icon: '🌍', title: 'Global CDN', desc: 'Fast from 200+ edge locations.' },
-                { icon: '👥', title: 'Team Collaboration', desc: 'Share and collaborate in real-time.' },
-                { icon: '⚡', title: 'AI Insights', desc: 'Anomaly detection and predictions.' },
-                { icon: '📊', title: 'Custom Reports', desc: 'Drag-and-drop report builder.' },
-              ].map((f, i) => (
-                <div key={i} className={`group p-8 rounded-2xl border transition-all hover:-translate-y-2 ${isDark ? 'bg-slate-900/50 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-200 hover:shadow-xl'}`}>
-                  <div className="text-4xl mb-6">{f.icon}</div>
-                  <h3 className="text-xl font-semibold mb-3">{f.title}</h3>
-                  <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>{f.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="pricing" className="py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Simple<span className="bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent"> pricing</span></h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {[
-                { name: 'Starter', price: '$0', features: ['5 dashboards', '1,000 events/mo', 'Email support'], popular: false },
-                { name: 'Pro', price: '$49', features: ['Unlimited dashboards', '100,000 events/mo', 'Priority support'], popular: true },
-                { name: 'Enterprise', price: 'Custom', features: ['Everything in Pro', 'Unlimited events', 'Dedicated support'], popular: false },
-              ].map((plan, i) => (
-                <div key={i} className={`relative p-8 rounded-2xl border ${plan.popular ? 'border-cyan-500 scale-105' : isDark ? 'border-slate-800' : 'border-slate-200'} ${isDark ? 'bg-slate-900/50' : 'bg-white'}`}>
-                  {plan.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-cyan-500 to-violet-500 text-white text-sm font-medium rounded-full">Popular</div>}
-                  <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline gap-1 mb-6"><span className="text-4xl font-bold">{plan.price}</span>{plan.price !== 'Custom' && <span className={isDark ? 'text-slate-400' : 'text-slate-600'}>/mo</span>}</div>
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((f, j) => <li key={j} className="flex items-center gap-3"><span className="text-cyan-500">✓</span><span className={isDark ? 'text-slate-300' : 'text-slate-600'}>{f}</span></li>)}
-                  </ul>
-                  <button onClick={onEnterDashboard} className={`w-full py-3 rounded-xl font-medium ${plan.popular ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>Get Started</button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <footer className={`py-12 px-6 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h4l3-9 4 18 3-9h4" /></svg>
-              </div>
-              <span className="font-semibold">PulseMetrics</span>
-            </div>
-            <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>© 2025 PulseMetrics</p>
-          </div>
-        </footer>
+        <span class="text-xl font-bold gradient-text">PulseMetrics</span>
       </div>
-    );
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm font-medium text-slate-300 hover:text-cyan-400">Features</a>
+        <a href="#pricing" class="text-sm font-medium text-slate-300 hover:text-cyan-400">Pricing</a>
+      </div>
+      <button onclick="openDashboard()" class="btn btn-primary text-sm">
+        <span class="hidden sm:inline">Try Dashboard</span><span class="sm:hidden">Demo</span> →
+      </button>
+    </div>
+  </nav>
 
-    // Dashboard Tabs
-    const OverviewTab = ({ isDark, dateRange, setDateRange }) => {
-      const stats = [
-        { label: 'Total Revenue', value: '$845,231', change: '+12.5%', icon: '💰' },
-        { label: 'Active Users', value: '24,521', change: '+8.2%', icon: '👥' },
-        { label: 'Conversion Rate', value: '4.28%', change: '+2.1%', icon: '📈' },
-        { label: 'Churn Rate', value: '2.4%', change: '-0.3%', icon: '📉' },
-      ];
-      const filteredData = useMemo(() => revenueData.slice(-(dateRange === '6m' ? 6 : dateRange === '3m' ? 3 : 12)), [dateRange]);
-
-      return (
-        <>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <h1 className="text-2xl font-bold">Welcome back, John 👋</h1>
-              <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Here's what's happening today.</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className={`px-4 py-2 rounded-xl border outline-none ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}>
-                <option value="3m">Last 3 months</option>
-                <option value="6m">Last 6 months</option>
-                <option value="12m">Last 12 months</option>
-              </select>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">📥 Export</button>
-            </div>
+  <section class="relative pt-28 sm:pt-32 pb-16 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">⚡ New: AI-Powered Insights</div>
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mb-6">Analytics that<span class="gradient-text"> drive growth</span></h1>
+        <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-slate-400">Transform your data into actionable insights with real-time analytics.</p>
+        <button onclick="openDashboard()" class="btn btn-primary text-lg px-8 py-4">▶ Start Free Trial</button>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+          <div class="flex -space-x-3">
+            <div class="w-10 h-10 rounded-full border-2 border-slate-950 bg-gradient-to-br from-cyan-400 to-cyan-600"></div>
+            <div class="w-10 h-10 rounded-full border-2 border-slate-950 bg-gradient-to-br from-violet-400 to-violet-600"></div>
+            <div class="w-10 h-10 rounded-full border-2 border-slate-950 bg-gradient-to-br from-pink-400 to-pink-600"></div>
+            <div class="w-10 h-10 rounded-full border-2 border-slate-950 bg-gradient-to-br from-amber-400 to-amber-600"></div>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {stats.map((stat, i) => (
-              <div key={i} className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-xl text-2xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>{stat.icon}</div>
-                  <span className="text-sm font-medium text-emerald-500">{stat.change}</span>
-                </div>
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{stat.label}</p>
-                <p className="text-3xl font-bold mt-1">{stat.value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-6 mb-8">
-            <div className={`lg:col-span-2 p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-              <h3 className="font-semibold text-lg mb-6">Revenue Overview</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={filteredData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
-                  <XAxis dataKey="month" stroke={isDark ? '#64748b' : '#94a3b8'} />
-                  <YAxis stroke={isDark ? '#64748b' : '#94a3b8'} />
-                  <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
-                  <Line type="monotone" dataKey="revenue" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 4 }} />
-                  <Line type="monotone" dataKey="users" stroke="#8b5cf6" strokeWidth={3} dot={{ fill: '#8b5cf6', r: 4 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-              <h3 className="font-semibold text-lg mb-6">Revenue by Plan</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart><Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value">{pieData.map((e, i) => <Cell key={i} fill={e.color} />)}</Pie><Tooltip /></PieChart>
-              </ResponsiveContainer>
-              <div className="grid grid-cols-2 gap-2 mt-4">
-                {pieData.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-            <h3 className="font-semibold text-lg mb-6">Leads by Channel</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={channelData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
-                <XAxis type="number" stroke={isDark ? '#64748b' : '#94a3b8'} />
-                <YAxis dataKey="channel" type="category" stroke={isDark ? '#64748b' : '#94a3b8'} width={80} />
-                <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
-                <Bar dataKey="leads" fill="#06b6d4" radius={[0, 4, 4, 0]} />
-                <Bar dataKey="converted" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </>
-      );
-    };
-
-    const AnalyticsTab = ({ isDark }) => (
-      <>
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">Analytics</h1>
-          <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Deep dive into your metrics.</p>
+          <div><div class="text-amber-400">★★★★★</div><p class="text-sm text-slate-400">Trusted by 10,000+ teams</p></div>
         </div>
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-            <h3 className="font-semibold text-lg mb-6">Session Trends</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={revenueData}>
-                <defs><linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/><stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/></linearGradient></defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#334155' : '#e2e8f0'} />
-                <XAxis dataKey="month" stroke={isDark ? '#64748b' : '#94a3b8'} />
-                <YAxis stroke={isDark ? '#64748b' : '#94a3b8'} />
-                <Tooltip contentStyle={{ backgroundColor: isDark ? '#1e293b' : '#fff', borderRadius: '12px', border: 'none' }} />
-                <Area type="monotone" dataKey="sessions" stroke="#8b5cf6" fill="url(#colorS)" />
-              </AreaChart>
-            </ResponsiveContainer>
+      </div>
+
+      <!-- Preview -->
+      <div class="mt-12 sm:mt-20">
+        <div class="card overflow-hidden shadow-2xl">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-800">
+            <div class="flex gap-2"><div class="w-3 h-3 rounded-full bg-red-500"></div><div class="w-3 h-3 rounded-full bg-amber-500"></div><div class="w-3 h-3 rounded-full bg-green-500"></div></div>
           </div>
-          <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-            <h3 className="font-semibold text-lg mb-6">Performance Radar</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <RadarChart data={radarData}>
-                <PolarGrid stroke={isDark ? '#334155' : '#e2e8f0'} />
-                <PolarAngleAxis dataKey="metric" stroke={isDark ? '#64748b' : '#94a3b8'} />
-                <Radar dataKey="value" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.3} />
-              </RadarChart>
-            </ResponsiveContainer>
+          <div class="p-4 sm:p-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+              <div class="p-3 rounded-xl bg-slate-800/50 border border-slate-700"><p class="text-xs text-slate-400">Revenue</p><p class="text-lg font-bold">$845,231</p><p class="text-xs text-emerald-500">+12.5%</p></div>
+              <div class="p-3 rounded-xl bg-slate-800/50 border border-slate-700"><p class="text-xs text-slate-400">Users</p><p class="text-lg font-bold">24,521</p><p class="text-xs text-emerald-500">+8.2%</p></div>
+              <div class="p-3 rounded-xl bg-slate-800/50 border border-slate-700"><p class="text-xs text-slate-400">Conversion</p><p class="text-lg font-bold">4.28%</p><p class="text-xs text-emerald-500">+2.1%</p></div>
+              <div class="p-3 rounded-xl bg-slate-800/50 border border-slate-700"><p class="text-xs text-slate-400">Session</p><p class="text-lg font-bold">4m 32s</p><p class="text-xs text-emerald-500">+15.3%</p></div>
+            </div>
+            <svg viewBox="0 0 400 100" class="w-full h-32">
+              <defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0,70 L50,60 L100,65 L150,45 L200,50 L250,30 L300,35 L350,20 L400,10 L400,100 L0,100 Z" fill="url(#areaGrad)"/>
+              <path d="M0,70 L50,60 L100,65 L150,45 L200,50 L250,30 L300,35 L350,20 L400,10" fill="none" stroke="#06b6d4" stroke-width="3"/>
+              <circle cx="0" cy="70" r="4" fill="#06b6d4"/><circle cx="100" cy="65" r="4" fill="#06b6d4"/><circle cx="200" cy="50" r="4" fill="#06b6d4"/><circle cx="300" cy="35" r="4" fill="#06b6d4"/><circle cx="400" cy="10" r="4" fill="#06b6d4"/>
+            </svg>
           </div>
         </div>
-        <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-          <h3 className="font-semibold text-lg mb-6">Traffic Sources</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className={isDark ? 'bg-slate-800/50' : 'bg-slate-50'}>
-                <tr>{['Source', 'Visits', 'Bounce', 'Progress'].map(h => <th key={h} className={`px-6 py-4 text-left text-xs font-semibold uppercase ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{h}</th>)}</tr>
-              </thead>
-              <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
-                {trafficData.map((r, i) => (
-                  <tr key={i} className={isDark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}>
-                    <td className="px-6 py-4 font-medium">{r.source}</td>
-                    <td className="px-6 py-4">{r.visits.toLocaleString()}</td>
-                    <td className="px-6 py-4">{r.bounce}%</td>
-                    <td className="px-6 py-4"><div className={`w-full h-2 rounded-full ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}><div className="h-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500" style={{ width: `${(r.visits / 50000) * 100}%` }} /></div></td>
-                  </tr>
-                ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="py-16 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Everything you need to<span class="gradient-text"> scale</span></h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">📈</div><h3 class="text-lg font-semibold mb-2">Real-time Analytics</h3><p class="text-slate-400 text-sm">Track metrics as they happen.</p></div>
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">🔒</div><h3 class="text-lg font-semibold mb-2">Enterprise Security</h3><p class="text-slate-400 text-sm">Bank-level encryption.</p></div>
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">🌍</div><h3 class="text-lg font-semibold mb-2">Global CDN</h3><p class="text-slate-400 text-sm">200+ edge locations.</p></div>
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">👥</div><h3 class="text-lg font-semibold mb-2">Team Collaboration</h3><p class="text-slate-400 text-sm">Real-time sharing.</p></div>
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">⚡</div><h3 class="text-lg font-semibold mb-2">AI Insights</h3><p class="text-slate-400 text-sm">Anomaly detection.</p></div>
+        <div class="card p-6 hover:border-slate-700 transition"><div class="text-4xl mb-4">📊</div><h3 class="text-lg font-semibold mb-2">Custom Reports</h3><p class="text-slate-400 text-sm">Drag-and-drop builder.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="py-16 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Simple<span class="gradient-text"> pricing</span></h2>
+      <div class="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+        <div class="card p-6"><h3 class="text-xl font-semibold mb-2">Starter</h3><p class="text-4xl font-bold mb-6">$0<span class="text-lg text-slate-400">/mo</span></p><ul class="space-y-2 mb-6 text-slate-300 text-sm"><li>✓ 5 dashboards</li><li>✓ 1,000 events/mo</li><li>✓ Email support</li></ul><button onclick="openDashboard()" class="btn btn-secondary w-full">Get Started</button></div>
+        <div class="card p-6 border-2 border-cyan-500 relative"><div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 gradient-bg text-white text-xs font-medium rounded-full">Popular</div><h3 class="text-xl font-semibold mb-2">Pro</h3><p class="text-4xl font-bold mb-6">$49<span class="text-lg text-slate-400">/mo</span></p><ul class="space-y-2 mb-6 text-slate-300 text-sm"><li>✓ Unlimited dashboards</li><li>✓ 100,000 events/mo</li><li>✓ Priority support</li></ul><button onclick="openDashboard()" class="btn btn-primary w-full">Get Started</button></div>
+        <div class="card p-6"><h3 class="text-xl font-semibold mb-2">Enterprise</h3><p class="text-4xl font-bold mb-6">Custom</p><ul class="space-y-2 mb-6 text-slate-300 text-sm"><li>✓ Everything in Pro</li><li>✓ Unlimited events</li><li>✓ Dedicated support</li></ul><button onclick="openDashboard()" class="btn btn-secondary w-full">Contact Sales</button></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 px-4 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg gradient-box flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="white" stroke-width="2.5"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></div><span class="font-semibold">PulseMetrics</span></div>
+      <p class="text-sm text-slate-500">© 2025 PulseMetrics</p>
+    </div>
+  </footer>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+  <aside id="sidebar" class="fixed left-0 top-0 h-full z-40 w-64 bg-slate-900 border-r border-slate-800 transition-all duration-300">
+    <div class="p-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl gradient-box flex items-center justify-center flex-shrink-0"><svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="white" stroke-width="2.5"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></div>
+      <span id="sidebarTitle" class="text-lg font-bold gradient-text">PulseMetrics</span>
+    </div>
+    <nav class="mt-6 px-3" id="sidebarNav">
+      <button onclick="switchTab('overview')" class="sidebar-item active" data-tab="overview"><span class="text-xl">🏠</span><span class="nav-text">Overview</span></button>
+      <button onclick="switchTab('analytics')" class="sidebar-item" data-tab="analytics"><span class="text-xl">📊</span><span class="nav-text">Analytics</span></button>
+      <button onclick="switchTab('customers')" class="sidebar-item" data-tab="customers"><span class="text-xl">👥</span><span class="nav-text">Customers</span></button>
+      <button onclick="switchTab('reports')" class="sidebar-item" data-tab="reports"><span class="text-xl">📄</span><span class="nav-text">Reports</span></button>
+      <button onclick="switchTab('messages')" class="sidebar-item" data-tab="messages"><span class="text-xl">💬</span><span class="nav-text">Messages</span></button>
+      <button onclick="switchTab('settings')" class="sidebar-item" data-tab="settings"><span class="text-xl">⚙️</span><span class="nav-text">Settings</span></button>
+    </nav>
+    <div class="absolute bottom-4 left-0 right-0 px-3"><button onclick="closeDashboard()" class="sidebar-item"><span class="text-xl">🚪</span><span class="nav-text">Back to Site</span></button></div>
+  </aside>
+
+  <main id="mainContent" class="ml-64 transition-all duration-300">
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-slate-950/80 border-b border-slate-800">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-4">
+        <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-slate-800 text-xl">☰</button>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button class="p-2.5 rounded-xl bg-slate-800 text-xl relative">🔔<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-500 rounded-full"></span></button>
+          <div class="flex items-center gap-2 pl-2 border-l border-slate-800">
+            <div class="w-10 h-10 rounded-xl gradient-box flex items-center justify-center text-white font-semibold">JD</div>
+            <div class="hidden sm:block"><p class="font-medium text-sm">John Doe</p><p class="text-xs text-slate-500">Admin</p></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-4 sm:p-6">
+      
+      <!-- Overview -->
+      <div id="tab-overview" class="tab-content">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div><h1 class="text-xl sm:text-2xl font-bold">Welcome back, John 👋</h1><p class="text-slate-400 text-sm">Here's what's happening today.</p></div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select class="input w-auto text-sm"><option>Last 12 months</option><option>Last 6 months</option><option>Last 3 months</option></select>
+            <button class="btn btn-primary text-sm">📥 Export</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div class="card p-4 sm:p-6"><div class="flex items-center justify-between mb-3"><div class="p-2 rounded-xl bg-slate-800 text-xl">💰</div><span class="text-xs font-medium text-emerald-500">+12.5%</span></div><p class="text-xs text-slate-400">Total Revenue</p><p class="text-xl sm:text-2xl font-bold mt-1">$845,231</p></div>
+          <div class="card p-4 sm:p-6"><div class="flex items-center justify-between mb-3"><div class="p-2 rounded-xl bg-slate-800 text-xl">👥</div><span class="text-xs font-medium text-emerald-500">+8.2%</span></div><p class="text-xs text-slate-400">Active Users</p><p class="text-xl sm:text-2xl font-bold mt-1">24,521</p></div>
+          <div class="card p-4 sm:p-6"><div class="flex items-center justify-between mb-3"><div class="p-2 rounded-xl bg-slate-800 text-xl">📈</div><span class="text-xs font-medium text-emerald-500">+2.1%</span></div><p class="text-xs text-slate-400">Conversion</p><p class="text-xl sm:text-2xl font-bold mt-1">4.28%</p></div>
+          <div class="card p-4 sm:p-6"><div class="flex items-center justify-between mb-3"><div class="p-2 rounded-xl bg-slate-800 text-xl">📉</div><span class="text-xs font-medium text-emerald-500">-0.3%</span></div><p class="text-xs text-slate-400">Churn Rate</p><p class="text-xl sm:text-2xl font-bold mt-1">2.4%</p></div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-4 mb-6">
+          <div class="lg:col-span-2 card p-4 sm:p-6">
+            <h3 class="font-semibold text-lg mb-4">Revenue Overview</h3>
+            <svg viewBox="0 0 600 200" class="w-full h-48 sm:h-64">
+              <defs>
+                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/></linearGradient>
+              </defs>
+              <!-- Grid -->
+              <line x1="50" y1="20" x2="50" y2="170" stroke="#1e293b" stroke-width="1"/>
+              <line x1="50" y1="170" x2="580" y2="170" stroke="#1e293b" stroke-width="1"/>
+              <line x1="50" y1="95" x2="580" y2="95" stroke="#1e293b" stroke-width="1" stroke-dasharray="4"/>
+              <line x1="50" y1="45" x2="580" y2="45" stroke="#1e293b" stroke-width="1" stroke-dasharray="4"/>
+              <!-- Labels -->
+              <text x="20" y="175" fill="#64748b" font-size="10">$0</text>
+              <text x="20" y="100" fill="#64748b" font-size="10">$60k</text>
+              <text x="20" y="50" fill="#64748b" font-size="10">$120k</text>
+              <text x="70" y="190" fill="#64748b" font-size="10">Jan</text>
+              <text x="160" y="190" fill="#64748b" font-size="10">Mar</text>
+              <text x="250" y="190" fill="#64748b" font-size="10">May</text>
+              <text x="340" y="190" fill="#64748b" font-size="10">Jul</text>
+              <text x="430" y="190" fill="#64748b" font-size="10">Sep</text>
+              <text x="520" y="190" fill="#64748b" font-size="10">Nov</text>
+              <!-- Area -->
+              <path d="M70,130 L115,115 L160,120 L205,95 L250,105 L295,70 L340,80 L385,55 L430,60 L475,40 L520,50 L565,30 L565,170 L70,170 Z" fill="url(#revGrad)"/>
+              <!-- Line -->
+              <path d="M70,130 L115,115 L160,120 L205,95 L250,105 L295,70 L340,80 L385,55 L430,60 L475,40 L520,50 L565,30" fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Users Line -->
+              <path d="M70,150 L115,140 L160,145 L205,125 L250,130 L295,110 L340,115 L385,95 L430,100 L475,80 L520,85 L565,65" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Dots -->
+              <circle cx="70" cy="130" r="5" fill="#06b6d4"/><circle cx="205" cy="95" r="5" fill="#06b6d4"/><circle cx="340" cy="80" r="5" fill="#06b6d4"/><circle cx="475" cy="40" r="5" fill="#06b6d4"/><circle cx="565" cy="30" r="5" fill="#06b6d4"/>
+              <circle cx="70" cy="150" r="5" fill="#8b5cf6"/><circle cx="205" cy="125" r="5" fill="#8b5cf6"/><circle cx="340" cy="115" r="5" fill="#8b5cf6"/><circle cx="475" cy="80" r="5" fill="#8b5cf6"/><circle cx="565" cy="65" r="5" fill="#8b5cf6"/>
+            </svg>
+            <div class="flex items-center justify-center gap-6 mt-4">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-cyan-500"></span><span class="text-sm text-slate-400">Revenue</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-violet-500"></span><span class="text-sm text-slate-400">Users</span></div>
+            </div>
+          </div>
+          <div class="card p-4 sm:p-6">
+            <h3 class="font-semibold text-lg mb-4">Revenue by Plan</h3>
+            <svg viewBox="0 0 200 200" class="w-full h-40 mx-auto">
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#64748b" stroke-width="20" stroke-dasharray="44 396" stroke-dashoffset="0"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="66 374" stroke-dashoffset="-44"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#8b5cf6" stroke-width="20" stroke-dasharray="132 308" stroke-dashoffset="-110"/>
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#06b6d4" stroke-width="20" stroke-dasharray="198 242" stroke-dashoffset="-242"/>
+              <text x="100" y="95" text-anchor="middle" fill="white" font-size="24" font-weight="bold">$845k</text>
+              <text x="100" y="115" text-anchor="middle" fill="#64748b" font-size="12">Total</text>
+            </svg>
+            <div class="grid grid-cols-2 gap-2 mt-4">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-cyan-500"></span><span class="text-sm text-slate-400">Enterprise 45%</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-violet-500"></span><span class="text-sm text-slate-400">Pro 30%</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500"></span><span class="text-sm text-slate-400">Starter 15%</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-500"></span><span class="text-sm text-slate-400">Free 10%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-4 sm:p-6">
+          <h3 class="font-semibold text-lg mb-4">Leads by Channel</h3>
+          <svg viewBox="0 0 600 180" class="w-full h-40">
+            <!-- Bars -->
+            <g transform="translate(100,0)">
+              <rect x="0" y="10" width="280" height="25" rx="4" fill="#06b6d4"/><text x="290" y="27" fill="#94a3b8" font-size="12">3,420</text>
+              <rect x="0" y="10" width="73" height="25" rx="4" fill="#8b5cf6"/>
+              <text x="-90" y="27" fill="#94a3b8" font-size="12">Organic</text>
+            </g>
+            <g transform="translate(100,35)">
+              <rect x="0" y="10" width="180" height="25" rx="4" fill="#06b6d4"/><text x="190" y="27" fill="#94a3b8" font-size="12">2,180</text>
+              <rect x="0" y="10" width="54" height="25" rx="4" fill="#8b5cf6"/>
+              <text x="-90" y="27" fill="#94a3b8" font-size="12">Paid Ads</text>
+            </g>
+            <g transform="translate(100,70)">
+              <rect x="0" y="10" width="130" height="25" rx="4" fill="#06b6d4"/><text x="140" y="27" fill="#94a3b8" font-size="12">1,560</text>
+              <rect x="0" y="10" width="42" height="25" rx="4" fill="#8b5cf6"/>
+              <text x="-90" y="27" fill="#94a3b8" font-size="12">Referral</text>
+            </g>
+            <g transform="translate(100,105)">
+              <rect x="0" y="10" width="80" height="25" rx="4" fill="#06b6d4"/><text x="90" y="27" fill="#94a3b8" font-size="12">980</text>
+              <rect x="0" y="10" width="20" height="25" rx="4" fill="#8b5cf6"/>
+              <text x="-90" y="27" fill="#94a3b8" font-size="12">Social</text>
+            </g>
+            <g transform="translate(100,140)">
+              <rect x="0" y="10" width="100" height="25" rx="4" fill="#06b6d4"/><text x="110" y="27" fill="#94a3b8" font-size="12">1,240</text>
+              <rect x="0" y="10" width="35" height="25" rx="4" fill="#8b5cf6"/>
+              <text x="-90" y="27" fill="#94a3b8" font-size="12">Email</text>
+            </g>
+          </svg>
+          <div class="flex items-center justify-center gap-6 mt-2">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-cyan-500"></span><span class="text-sm text-slate-400">Leads</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-violet-500"></span><span class="text-sm text-slate-400">Converted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div id="tab-analytics" class="tab-content" style="display:none">
+        <div class="mb-6"><h1 class="text-xl sm:text-2xl font-bold">Analytics</h1><p class="text-slate-400">Deep dive into your metrics.</p></div>
+        <div class="grid lg:grid-cols-2 gap-4 mb-6">
+          <div class="card p-4 sm:p-6">
+            <h3 class="font-semibold text-lg mb-4">Session Trends</h3>
+            <svg viewBox="0 0 400 150" class="w-full h-40">
+              <defs><linearGradient id="sessGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/></linearGradient></defs>
+              <path d="M20,100 L60,90 L100,95 L140,70 L180,80 L220,50 L260,60 L300,40 L340,45 L380,25 L380,130 L20,130 Z" fill="url(#sessGrad)"/>
+              <path d="M20,100 L60,90 L100,95 L140,70 L180,80 L220,50 L260,60 L300,40 L340,45 L380,25" fill="none" stroke="#8b5cf6" stroke-width="3"/>
+              <circle cx="20" cy="100" r="4" fill="#8b5cf6"/><circle cx="140" cy="70" r="4" fill="#8b5cf6"/><circle cx="260" cy="60" r="4" fill="#8b5cf6"/><circle cx="380" cy="25" r="4" fill="#8b5cf6"/>
+            </svg>
+          </div>
+          <div class="card p-4 sm:p-6">
+            <h3 class="font-semibold text-lg mb-4">Performance Score</h3>
+            <svg viewBox="0 0 200 200" class="w-full h-40">
+              <polygon points="100,20 170,60 170,140 100,180 30,140 30,60" fill="none" stroke="#1e293b" stroke-width="1"/>
+              <polygon points="100,50 145,75 145,125 100,150 55,125 55,75" fill="none" stroke="#1e293b" stroke-width="1"/>
+              <polygon points="100,80 120,90 120,110 100,120 80,110 80,90" fill="none" stroke="#1e293b" stroke-width="1"/>
+              <polygon points="100,30 160,65 145,120 100,155 55,120 40,65" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="2"/>
+              <circle cx="100" cy="30" r="4" fill="#06b6d4"/><circle cx="160" cy="65" r="4" fill="#06b6d4"/><circle cx="145" cy="120" r="4" fill="#06b6d4"/><circle cx="100" cy="155" r="4" fill="#06b6d4"/><circle cx="55" cy="120" r="4" fill="#06b6d4"/><circle cx="40" cy="65" r="4" fill="#06b6d4"/>
+              <text x="100" y="12" text-anchor="middle" fill="#94a3b8" font-size="9">Engagement</text>
+              <text x="180" y="65" text-anchor="start" fill="#94a3b8" font-size="9">Retention</text>
+              <text x="165" y="135" text-anchor="start" fill="#94a3b8" font-size="9">Satisfaction</text>
+              <text x="100" y="195" text-anchor="middle" fill="#94a3b8" font-size="9">Growth</text>
+              <text x="35" y="135" text-anchor="end" fill="#94a3b8" font-size="9">Revenue</text>
+              <text x="20" y="65" text-anchor="end" fill="#94a3b8" font-size="9">Efficiency</text>
+            </svg>
+          </div>
+        </div>
+        <div class="card p-4 sm:p-6">
+          <h3 class="font-semibold text-lg mb-4">Traffic Sources</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[500px]">
+              <thead class="bg-slate-800/50"><tr><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400">Source</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400">Visits</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400">Bounce</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400">Progress</th></tr></thead>
+              <tbody class="divide-y divide-slate-800">
+                <tr><td class="px-4 py-3 font-medium">Direct</td><td class="px-4 py-3">45,200</td><td class="px-4 py-3">32%</td><td class="px-4 py-3"><div class="w-full h-2 rounded-full bg-slate-700"><div class="h-2 rounded-full gradient-bg" style="width:90%"></div></div></td></tr>
+                <tr><td class="px-4 py-3 font-medium">Google</td><td class="px-4 py-3">38,400</td><td class="px-4 py-3">41%</td><td class="px-4 py-3"><div class="w-full h-2 rounded-full bg-slate-700"><div class="h-2 rounded-full gradient-bg" style="width:77%"></div></div></td></tr>
+                <tr><td class="px-4 py-3 font-medium">Facebook</td><td class="px-4 py-3">12,800</td><td class="px-4 py-3">55%</td><td class="px-4 py-3"><div class="w-full h-2 rounded-full bg-slate-700"><div class="h-2 rounded-full gradient-bg" style="width:26%"></div></div></td></tr>
+                <tr><td class="px-4 py-3 font-medium">LinkedIn</td><td class="px-4 py-3">15,200</td><td class="px-4 py-3">38%</td><td class="px-4 py-3"><div class="w-full h-2 rounded-full bg-slate-700"><div class="h-2 rounded-full gradient-bg" style="width:30%"></div></div></td></tr>
               </tbody>
             </table>
           </div>
         </div>
-      </>
-    );
+      </div>
 
-    const CustomersTab = ({ isDark }) => {
-      const [search, setSearch] = useState('');
-      const [sort, setSort] = useState({ key: 'mrr', dir: 'desc' });
-      const [page, setPage] = useState(1);
-      const [statusF, setStatusF] = useState('All');
-      const [planF, setPlanF] = useState('All');
-      const perPage = 8;
-
-      const filtered = useMemo(() => {
-        let d = [...tableData];
-        if (search) d = d.filter(x => x.company.toLowerCase().includes(search.toLowerCase()));
-        if (statusF !== 'All') d = d.filter(x => x.status === statusF);
-        if (planF !== 'All') d = d.filter(x => x.plan === planF);
-        d.sort((a, b) => sort.dir === 'asc' ? (a[sort.key] > b[sort.key] ? 1 : -1) : (a[sort.key] < b[sort.key] ? 1 : -1));
-        return d;
-      }, [search, statusF, planF, sort]);
-
-      const paginated = filtered.slice((page - 1) * perPage, page * perPage);
-      const totalPages = Math.ceil(filtered.length / perPage);
-
-      return (
-        <>
-          <div className="mb-8"><h1 className="text-2xl font-bold">Customers</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Manage your customers.</p></div>
-          <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-            <div className={`p-6 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'} flex flex-wrap items-center gap-3`}>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
-                <input type="text" placeholder="Search..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className={`pl-9 pr-4 py-2 rounded-lg w-48 text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} />
-              </div>
-              <select value={statusF} onChange={(e) => { setStatusF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`}><option value="All">All Status</option>{statuses.map(s => <option key={s} value={s}>{s}</option>)}</select>
-              <select value={planF} onChange={(e) => { setPlanF(e.target.value); setPage(1); }} className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`}><option value="All">All Plans</option>{plans.map(p => <option key={p} value={p}>{p}</option>)}</select>
-              <button className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-medium">+ Add</button>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className={isDark ? 'bg-slate-800/50' : 'bg-slate-50'}>
-                  <tr>{['company', 'email', 'plan', 'mrr', 'status', 'users'].map(c => <th key={c} onClick={() => setSort({ key: c, dir: sort.key === c && sort.dir === 'asc' ? 'desc' : 'asc' })} className={`px-6 py-4 text-left text-xs font-semibold uppercase cursor-pointer hover:text-cyan-500 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{c === 'mrr' ? 'MRR' : c}{sort.key === c && (sort.dir === 'asc' ? ' ↑' : ' ↓')}</th>)}</tr>
-                </thead>
-                <tbody className={`divide-y ${isDark ? 'divide-slate-800' : 'divide-slate-200'}`}>
-                  {paginated.map(r => (
-                    <tr key={r.id} className={isDark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}>
-                      <td className="px-6 py-4"><div className="flex items-center gap-3"><div className={`w-10 h-10 rounded-lg flex items-center justify-center font-semibold ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>{r.company[0]}</div><span className="font-medium">{r.company}</span></div></td>
-                      <td className={`px-6 py-4 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{r.email}</td>
-                      <td className="px-6 py-4"><span className={`px-2.5 py-1 rounded-lg text-xs font-medium ${r.plan === 'Enterprise' ? 'bg-cyan-500/10 text-cyan-500' : r.plan === 'Pro' ? 'bg-violet-500/10 text-violet-500' : r.plan === 'Starter' ? 'bg-amber-500/10 text-amber-500' : isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-200'}`}>{r.plan}</span></td>
-                      <td className="px-6 py-4 font-medium">${r.mrr.toLocaleString()}</td>
-                      <td className="px-6 py-4"><span className={`px-2.5 py-1 rounded-full text-xs font-medium ${r.status === 'Active' ? 'bg-emerald-500/10 text-emerald-500' : r.status === 'Pending' ? 'bg-amber-500/10 text-amber-500' : r.status === 'Churned' ? 'bg-red-500/10 text-red-500' : 'bg-cyan-500/10 text-cyan-500'}`}>{r.status}</span></td>
-                      <td className={`px-6 py-4 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{r.users}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className={`p-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'} flex items-center justify-between`}>
-              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Showing {(page-1)*perPage+1}-{Math.min(page*perPage, filtered.length)} of {filtered.length}</p>
-              <div className="flex gap-2">
-                <button onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1} className={`px-3 py-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>←</button>
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map(n => <button key={n} onClick={() => setPage(n)} className={`w-10 h-10 rounded-lg font-medium ${page === n ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>{n}</button>)}
-                <button onClick={() => setPage(p => Math.min(totalPages, p+1))} disabled={page === totalPages} className={`px-3 py-2 rounded-lg disabled:opacity-50 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>→</button>
-              </div>
-            </div>
+      <!-- Customers -->
+      <div id="tab-customers" class="tab-content" style="display:none">
+        <div class="mb-6"><h1 class="text-xl sm:text-2xl font-bold">Customers</h1><p class="text-slate-400">Manage your customers.</p></div>
+        <div class="card overflow-hidden">
+          <div class="p-4 border-b border-slate-800 flex flex-wrap items-center gap-2">
+            <input type="text" id="searchCustomers" placeholder="🔍 Search..." class="input w-40 text-sm" oninput="renderCustomers()">
+            <select id="filterStatus" class="input w-auto text-sm" onchange="renderCustomers()"><option value="">All Status</option><option>Active</option><option>Pending</option><option>Trial</option><option>Churned</option></select>
+            <select id="filterPlan" class="input w-auto text-sm" onchange="renderCustomers()"><option value="">All Plans</option><option>Enterprise</option><option>Pro</option><option>Starter</option><option>Free</option></select>
+            <button class="btn btn-primary text-sm ml-auto">+ Add</button>
           </div>
-        </>
-      );
-    };
-
-    const ReportsTab = ({ isDark }) => {
-      const [type, setType] = useState('All');
-      const filtered = type === 'All' ? reportsData : reportsData.filter(r => r.type === type);
-      return (
-        <>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div><h1 className="text-2xl font-bold">Reports</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Generate and download reports.</p></div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">+ Create</button>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[600px]">
+              <thead class="bg-slate-800/50"><tr><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400 cursor-pointer" onclick="sortBy('company')">Company</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400 cursor-pointer" onclick="sortBy('plan')">Plan</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400 cursor-pointer" onclick="sortBy('mrr')">MRR</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400 cursor-pointer" onclick="sortBy('status')">Status</th><th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-400">Users</th></tr></thead>
+              <tbody id="customersTable" class="divide-y divide-slate-800"></tbody>
+            </table>
           </div>
-          <div className="flex gap-2 mb-6 flex-wrap">
-            {['All', 'Financial', 'Analytics', 'Customer', 'Marketing'].map(t => <button key={t} onClick={() => setType(t)} className={`px-4 py-2 rounded-lg text-sm font-medium ${type === t ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>{t}</button>)}
-          </div>
-          <div className="grid gap-4">
-            {filtered.map(r => (
-              <div key={r.id} className={`p-6 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-                <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-xl text-2xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>📄</div>
-                  <div>
-                    <h3 className="font-semibold">{r.name}</h3>
-                    <div className={`flex items-center gap-4 mt-1 text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <span>📅 {r.date}</span>
-                      <span>{r.size}</span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs ${r.status === 'Ready' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>{r.status}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>👁</button>
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>📥</button>
-                  <button className={`p-2 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}>🗑</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      );
-    };
-
-    const MessagesTab = ({ isDark }) => {
-      const [selected, setSelected] = useState(messagesData[0]);
-      const [newMsg, setNewMsg] = useState('');
-      const [msgs, setMsgs] = useState(chatMessages);
-      const send = () => { if (newMsg.trim()) { setMsgs([...msgs, { id: msgs.length + 1, sender: 'me', text: newMsg, time: 'Now' }]); setNewMsg(''); } };
-      return (
-        <>
-          <div className="mb-8"><h1 className="text-2xl font-bold">Messages</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Chat with your team.</p></div>
-          <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`} style={{ height: '500px' }}>
-            <div className="flex h-full">
-              <div className={`w-72 border-r ${isDark ? 'border-slate-800' : 'border-slate-200'} overflow-auto`}>
-                {messagesData.map(c => (
-                  <div key={c.id} onClick={() => setSelected(c)} className={`p-4 cursor-pointer ${selected.id === c.id ? isDark ? 'bg-slate-800' : 'bg-slate-100' : isDark ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50'}`}>
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white font-semibold text-sm">{c.avatar}</div>
-                        {c.online && <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between"><span className="font-semibold text-sm">{c.name}</span><span className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{c.time}</span></div>
-                        <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{c.lastMessage}</p>
-                      </div>
-                      {c.unread > 0 && <span className="w-5 h-5 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center">{c.unread}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex-1 flex flex-col">
-                <div className={`p-4 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'} flex items-center gap-3`}>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white font-semibold">{selected.avatar}</div>
-                  <div><p className="font-semibold">{selected.name}</p><p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{selected.role}</p></div>
-                </div>
-                <div className="flex-1 overflow-auto p-4 space-y-4">
-                  {msgs.map(m => (
-                    <div key={m.id} className={`flex ${m.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs px-4 py-2 rounded-2xl ${m.sender === 'me' ? 'bg-gradient-to-r from-cyan-500 to-violet-500 text-white' : isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>
-                        <p className="text-sm">{m.text}</p>
-                        <p className={`text-xs mt-1 ${m.sender === 'me' ? 'text-white/70' : isDark ? 'text-slate-500' : 'text-slate-400'}`}>{m.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className={`p-4 border-t ${isDark ? 'border-slate-800' : 'border-slate-200'} flex items-center gap-3`}>
-                  <input type="text" value={newMsg} onChange={(e) => setNewMsg(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && send()} placeholder="Type a message..." className={`flex-1 px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} />
-                  <button onClick={send} className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 text-white">➤</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    };
-
-    const SettingsTab = ({ isDark }) => {
-      const [section, setSection] = useState('profile');
-      const [notifs, setNotifs] = useState({ email: true, push: true, weekly: false });
-      return (
-        <>
-          <div className="mb-8"><h1 className="text-2xl font-bold">Settings</h1><p className={isDark ? 'text-slate-400' : 'text-slate-600'}>Manage your account.</p></div>
-          <div className="flex flex-col lg:flex-row gap-6">
-            <div className={`lg:w-64 p-4 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-              {[{ id: 'profile', label: '👤 Profile' }, { id: 'security', label: '🔒 Security' }, { id: 'notifications', label: '🔔 Notifications' }, { id: 'billing', label: '💳 Billing' }].map(s => (
-                <button key={s.id} onClick={() => setSection(s.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 text-left ${section === s.id ? 'bg-gradient-to-r from-cyan-500/10 to-violet-500/10 text-cyan-500' : isDark ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}>
-                  <span className="font-medium">{s.label}</span>
-                </button>
-              ))}
-            </div>
-            <div className={`flex-1 p-6 rounded-2xl border ${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'}`}>
-              {section === 'profile' && (
-                <div className="space-y-6">
-                  <h2 className="text-lg font-semibold">Profile Information</h2>
-                  <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white text-2xl font-bold">JD</div>
-                    <div><h3 className="font-semibold">John Doe</h3><p className={isDark ? 'text-slate-400' : 'text-slate-500'}>Admin</p></div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {['First Name', 'Last Name', 'Email', 'Phone'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="text" defaultValue={['John', 'Doe', 'john@pulsemetrics.io', '+1 555-1234'][i]} className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
-                  </div>
-                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">💾 Save</button>
-                </div>
-              )}
-              {section === 'security' && (
-                <div className="space-y-6">
-                  <h2 className="text-lg font-semibold">Security Settings</h2>
-                  {['Current Password', 'New Password', 'Confirm Password'].map((l, i) => <div key={i}><label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{l}</label><input type="password" placeholder="••••••••" className={`w-full px-4 py-2 rounded-xl ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200'} border outline-none`} /></div>)}
-                  <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">💾 Update</button>
-                </div>
-              )}
-              {section === 'notifications' && (
-                <div className="space-y-6">
-                  <h2 className="text-lg font-semibold">Notification Preferences</h2>
-                  {[{ key: 'email', label: 'Email Notifications' }, { key: 'push', label: 'Push Notifications' }, { key: 'weekly', label: 'Weekly Digest' }].map(n => (
-                    <div key={n.key} className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'} flex items-center justify-between`}>
-                      <span className="font-medium">{n.label}</span>
-                      <button onClick={() => setNotifs({ ...notifs, [n.key]: !notifs[n.key] })} className={`w-12 h-6 rounded-full transition-colors ${notifs[n.key] ? 'bg-cyan-500' : isDark ? 'bg-slate-700' : 'bg-slate-300'}`}><div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs[n.key] ? 'translate-x-6' : 'translate-x-0.5'}`} /></button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {section === 'billing' && (
-                <div className="space-y-6">
-                  <h2 className="text-lg font-semibold">Billing & Subscription</h2>
-                  <div className={`p-6 rounded-xl border-2 border-cyan-500 ${isDark ? 'bg-cyan-500/10' : 'bg-cyan-50'}`}>
-                    <div className="flex items-center justify-between mb-2"><span className="text-lg font-semibold">Pro Plan</span><span className="px-3 py-1 rounded-full bg-cyan-500 text-white text-sm">Active</span></div>
-                    <p className="text-3xl font-bold">$49<span className={`text-lg font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/month</span></p>
-                  </div>
-                  <div className={`p-4 rounded-xl ${isDark ? 'bg-slate-800' : 'bg-slate-100'} flex items-center gap-4`}>
-                    <span className="text-2xl">💳</span><div><p className="font-medium">•••• 4242</p><p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Expires 12/26</p></div>
-                  </div>
-                  <button className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-xl font-medium">Upgrade Plan</button>
-                </div>
-              )}
-            </div>
-          </div>
-        </>
-      );
-    };
-
-    // Dashboard
-    const Dashboard = ({ onBack, isDark, toggleTheme }) => {
-      const [sidebar, setSidebar] = useState(true);
-      const [tab, setTab] = useState('overview');
-      const [notifs, setNotifs] = useState(false);
-      const [dateRange, setDateRange] = useState('12m');
-
-      const navItems = [
-        { icon: '🏠', label: 'Overview', id: 'overview' },
-        { icon: '📊', label: 'Analytics', id: 'analytics' },
-        { icon: '👥', label: 'Customers', id: 'customers' },
-        { icon: '📄', label: 'Reports', id: 'reports' },
-        { icon: '💬', label: 'Messages', id: 'messages' },
-        { icon: '⚙️', label: 'Settings', id: 'settings' },
-      ];
-
-      return (
-        <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'}`}>
-          <aside className={`fixed left-0 top-0 h-full z-40 transition-all duration-300 ${sidebar ? 'w-64' : 'w-20'} ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'} border-r`}>
-            <div className="p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center flex-shrink-0"><Logo /></div>
-              {sidebar && <span className="text-lg font-bold bg-gradient-to-r from-cyan-500 to-violet-500 bg-clip-text text-transparent">PulseMetrics</span>}
-            </div>
-            <nav className="mt-6 px-3">
-              {navItems.map(n => (
-                <button key={n.id} onClick={() => setTab(n.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 ${tab === n.id ? 'bg-gradient-to-r from-cyan-500/10 to-violet-500/10 text-cyan-500' : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}>
-                  <span className="text-xl flex-shrink-0">{n.icon}</span>{sidebar && <span className="font-medium">{n.label}</span>}
-                </button>
-              ))}
-            </nav>
-            <div className="absolute bottom-4 left-0 right-0 px-3">
-              <button onClick={onBack} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}>
-                <span className="text-xl flex-shrink-0">🚪</span>{sidebar && <span className="font-medium">Back to Site</span>}
-              </button>
-            </div>
-          </aside>
-
-          <main className={`transition-all duration-300 ${sidebar ? 'ml-64' : 'ml-20'}`}>
-            <header className={`sticky top-0 z-30 backdrop-blur-xl ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50/80 border-slate-200'} border-b`}>
-              <div className="flex items-center justify-between px-6 py-4">
-                <button onClick={() => setSidebar(!sidebar)} className={`p-2 rounded-lg text-xl ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-200'}`}>☰</button>
-                <div className="flex items-center gap-3">
-                  <button onClick={toggleTheme} className={`p-2.5 rounded-xl text-xl ${isDark ? 'bg-slate-800' : 'bg-white'}`}>{isDark ? '☀️' : '🌙'}</button>
-                  <div className="relative">
-                    <button onClick={() => setNotifs(!notifs)} className={`p-2.5 rounded-xl text-xl ${isDark ? 'bg-slate-800' : 'bg-white'} relative`}>🔔<span className="absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-500 rounded-full" /></button>
-                    {notifs && (
-                      <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl border shadow-xl ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
-                        <div className={`p-4 border-b ${isDark ? 'border-slate-800' : 'border-slate-200'}`}><h3 className="font-semibold">Notifications</h3></div>
-                        {[{ icon: '✅', msg: 'New customer signed up', time: '2m' }, { icon: '⚠️', msg: 'Usage limit approaching', time: '15m' }].map((n, i) => (
-                          <div key={i} className={`p-4 border-b ${isDark ? 'border-slate-800' : 'border-slate-100'} flex items-start gap-3`}>
-                            <span className="text-xl">{n.icon}</span>
-                            <div><p className="text-sm">{n.msg}</p><p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{n.time} ago</p></div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className={`flex items-center gap-3 pl-3 border-l ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center text-white font-semibold">JD</div>
-                    <div className="hidden sm:block"><p className="font-medium text-sm">John Doe</p><p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Admin</p></div>
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <div className="p-6">
-              {tab === 'overview' && <OverviewTab isDark={isDark} dateRange={dateRange} setDateRange={setDateRange} />}
-              {tab === 'analytics' && <AnalyticsTab isDark={isDark} />}
-              {tab === 'customers' && <CustomersTab isDark={isDark} />}
-              {tab === 'reports' && <ReportsTab isDark={isDark} />}
-              {tab === 'messages' && <MessagesTab isDark={isDark} />}
-              {tab === 'settings' && <SettingsTab isDark={isDark} />}
-            </div>
-          </main>
+          <div class="p-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3"><p id="customersInfo" class="text-sm text-slate-400"></p><div id="pagination" class="flex gap-1"></div></div>
         </div>
-      );
-    };
+      </div>
 
-    // App
-    function App() {
-      const [view, setView] = useState('landing');
-      const [isDark, setIsDark] = useState(true);
-      return view === 'landing' 
-        ? <LandingPage onEnterDashboard={() => setView('dashboard')} isDark={isDark} toggleTheme={() => setIsDark(!isDark)} />
-        : <Dashboard onBack={() => setView('landing')} isDark={isDark} toggleTheme={() => setIsDark(!isDark)} />;
-    }
+      <!-- Reports -->
+      <div id="tab-reports" class="tab-content" style="display:none">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"><div><h1 class="text-xl sm:text-2xl font-bold">Reports</h1><p class="text-slate-400">Generate and download reports.</p></div><button class="btn btn-primary">+ Create Report</button></div>
+        <div class="flex flex-wrap gap-2 mb-6" id="reportFilters">
+          <button onclick="filterReports('All')" class="btn btn-primary text-sm report-filter active">All</button>
+          <button onclick="filterReports('Financial')" class="btn btn-secondary text-sm report-filter">Financial</button>
+          <button onclick="filterReports('Analytics')" class="btn btn-secondary text-sm report-filter">Analytics</button>
+          <button onclick="filterReports('Customer')" class="btn btn-secondary text-sm report-filter">Customer</button>
+        </div>
+        <div id="reportsList" class="grid gap-4"></div>
+      </div>
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-  </script>
+      <!-- Messages -->
+      <div id="tab-messages" class="tab-content" style="display:none">
+        <div class="mb-6"><h1 class="text-xl sm:text-2xl font-bold">Messages</h1><p class="text-slate-400">Chat with your team.</p></div>
+        
+        <div class="card overflow-hidden" style="height:480px">
+          <div class="flex h-full">
+            <!-- Chat List - always visible on desktop, toggleable on mobile -->
+            <div id="chatListPanel" class="w-full sm:w-72 flex-shrink-0 border-r border-slate-800 overflow-auto bg-slate-900/50">
+              <div class="p-3 border-b border-slate-800 font-semibold text-sm text-slate-400">CONVERSATIONS</div>
+              <div id="chatList"></div>
+            </div>
+            <!-- Chat Area -->
+            <div id="chatAreaPanel" class="hidden sm:flex flex-1 flex-col">
+              <div id="chatHeader" class="p-4 border-b border-slate-800 flex items-center gap-3">
+                <button onclick="backToList()" class="sm:hidden p-2 rounded-lg hover:bg-slate-800 text-lg mr-1">←</button>
+                <div class="w-10 h-10 rounded-full gradient-box flex items-center justify-center text-white font-semibold text-sm">SC</div>
+                <div><p class="font-semibold">Sarah Chen</p><p class="text-sm text-slate-400">Enterprise Client</p></div>
+              </div>
+              <div id="chatMessages" class="flex-1 overflow-auto p-4 space-y-3"></div>
+              <div class="p-4 border-t border-slate-800 flex items-center gap-3">
+                <input type="text" id="msgInput" placeholder="Type a message..." class="input flex-1" onkeypress="if(event.key==='Enter')sendMsg()">
+                <button onclick="sendMsg()" class="btn btn-primary px-4 py-2">Send ➤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="tab-settings" class="tab-content" style="display:none">
+        <div class="mb-6"><h1 class="text-xl sm:text-2xl font-bold">Settings</h1><p class="text-slate-400">Manage your account.</p></div>
+        <div class="flex flex-col lg:flex-row gap-4">
+          <div class="lg:w-56 card p-4">
+            <button onclick="showSettings('profile')" class="sidebar-item active" data-settings="profile">👤 Profile</button>
+            <button onclick="showSettings('security')" class="sidebar-item" data-settings="security">🔒 Security</button>
+            <button onclick="showSettings('billing')" class="sidebar-item" data-settings="billing">💳 Billing</button>
+          </div>
+          <div class="flex-1 card p-4 sm:p-6">
+            <div id="settings-profile">
+              <h2 class="text-lg font-semibold mb-6">Profile Information</h2>
+              <div class="flex items-center gap-4 mb-6"><div class="w-16 h-16 rounded-2xl gradient-box flex items-center justify-center text-white text-xl font-bold">JD</div><div><h3 class="font-semibold">John Doe</h3><p class="text-slate-400">Admin</p></div></div>
+              <div class="grid sm:grid-cols-2 gap-4 mb-6"><div><label class="block text-sm font-medium mb-2">First Name</label><input type="text" value="John" class="input"></div><div><label class="block text-sm font-medium mb-2">Last Name</label><input type="text" value="Doe" class="input"></div><div><label class="block text-sm font-medium mb-2">Email</label><input type="email" value="john@pulsemetrics.io" class="input"></div><div><label class="block text-sm font-medium mb-2">Phone</label><input type="tel" value="+1 555-1234" class="input"></div></div>
+              <button class="btn btn-primary">💾 Save Changes</button>
+            </div>
+            <div id="settings-security" style="display:none">
+              <h2 class="text-lg font-semibold mb-6">Security Settings</h2>
+              <div class="space-y-4 mb-6"><div><label class="block text-sm font-medium mb-2">Current Password</label><input type="password" placeholder="••••••••" class="input"></div><div><label class="block text-sm font-medium mb-2">New Password</label><input type="password" placeholder="••••••••" class="input"></div></div>
+              <button class="btn btn-primary">💾 Update Password</button>
+            </div>
+            <div id="settings-billing" style="display:none">
+              <h2 class="text-lg font-semibold mb-6">Billing & Subscription</h2>
+              <div class="p-6 rounded-xl border-2 border-cyan-500 bg-cyan-500/10 mb-6"><div class="flex items-center justify-between mb-2"><span class="text-lg font-semibold">Pro Plan</span><span class="px-3 py-1 rounded-full bg-cyan-500 text-white text-sm">Active</span></div><p class="text-3xl font-bold">$49<span class="text-lg font-normal text-slate-400">/month</span></p></div>
+              <div class="p-4 rounded-xl bg-slate-800 flex items-center gap-4 mb-6"><span class="text-2xl">💳</span><div><p class="font-medium">•••• 4242</p><p class="text-sm text-slate-400">Expires 12/26</p></div></div>
+              <button class="btn btn-primary">Upgrade Plan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+var companies=['Acme Corp','TechFlow Inc','DataSphere','CloudNine','Quantum Labs','NexGen','ByteWave','InnovateTech','DigiPulse','SmartScale'];
+var statuses=['Active','Pending','Churned','Trial'];
+var plans=['Enterprise','Pro','Starter','Free'];
+var customers=[];
+for(var i=0;i<50;i++){customers.push({id:i+1,company:companies[i%10],plan:plans[i%4],mrr:500+(i*317)%14500,status:statuses[i%4],users:5+(i*13)%145})}
+
+var reports=[{id:1,name:'Q4 2024 Revenue Report',type:'Financial',date:'2024-12-01',size:'2.4 MB'},{id:2,name:'User Growth Analysis',type:'Analytics',date:'2024-11-28',size:'1.8 MB'},{id:3,name:'Customer Churn Report',type:'Customer',date:'2024-11-25',size:'3.1 MB'}];
+var chats=[{id:1,name:'Sarah Chen',avatar:'SC',role:'Enterprise',msg:'Thanks!',time:'2m',unread:2,online:true},{id:2,name:'Mike Johnson',avatar:'MJ',role:'Pro User',msg:'Call?',time:'15m',unread:0,online:true},{id:3,name:'Emily Davis',avatar:'ED',role:'Support',msg:'Done',time:'1h',unread:1,online:false}];
+var messages=[{from:'them',text:'Hi! Question about API limits.',time:'10:30'},{from:'me',text:'Sure! What would you like to know?',time:'10:32'},{from:'them',text:'Enterprise tier limits?',time:'10:33'},{from:'me',text:'10,000 requests/min.',time:'10:35'},{from:'them',text:'Thanks!',time:'10:36'}];
+
+var page=1,sortKey='mrr',sortDir='desc',sidebarOpen=true;
+
+function openDashboard(){document.getElementById('landing').style.display='none';document.getElementById('dashboard').style.display='block';renderCustomers();renderReports('All');renderChats();renderMessages();initChatLayout()}
+function closeDashboard(){document.getElementById('dashboard').style.display='none';document.getElementById('landing').style.display='block'}
+function switchTab(tab){var tabs=document.querySelectorAll('.tab-content');for(var i=0;i<tabs.length;i++)tabs[i].style.display='none';document.getElementById('tab-'+tab).style.display='block';var items=document.querySelectorAll('#sidebarNav .sidebar-item');for(var i=0;i<items.length;i++){items[i].classList.remove('active');if(items[i].dataset.tab===tab)items[i].classList.add('active')}if(tab==='messages')initChatLayout()}
+function initChatLayout(){var listPanel=document.getElementById('chatListPanel');var chatPanel=document.getElementById('chatAreaPanel');if(window.innerWidth>=640){listPanel.style.display='block';chatPanel.style.display='flex'}else{listPanel.style.display='block';chatPanel.style.display='none'}}
+function toggleSidebar(){sidebarOpen=!sidebarOpen;var sb=document.getElementById('sidebar'),mc=document.getElementById('mainContent');if(sidebarOpen){sb.style.width='256px';mc.style.marginLeft='256px';var t=document.querySelectorAll('.nav-text');for(var i=0;i<t.length;i++)t[i].style.display='inline';document.getElementById('sidebarTitle').style.display='inline'}else{sb.style.width='72px';mc.style.marginLeft='72px';var t=document.querySelectorAll('.nav-text');for(var i=0;i<t.length;i++)t[i].style.display='none';document.getElementById('sidebarTitle').style.display='none'}}
+
+function renderCustomers(){var search=(document.getElementById('searchCustomers').value||'').toLowerCase(),status=document.getElementById('filterStatus').value||'',plan=document.getElementById('filterPlan').value||'';
+var filtered=customers.filter(function(c){if(search&&c.company.toLowerCase().indexOf(search)===-1)return false;if(status&&c.status!==status)return false;if(plan&&c.plan!==plan)return false;return true});
+filtered.sort(function(a,b){if(sortDir==='asc')return a[sortKey]>b[sortKey]?1:-1;return a[sortKey]<b[sortKey]?1:-1});
+var perPage=8,start=(page-1)*perPage,paged=filtered.slice(start,start+perPage),total=Math.ceil(filtered.length/perPage);
+var planColors={Enterprise:'bg-cyan-500/10 text-cyan-500',Pro:'bg-violet-500/10 text-violet-500',Starter:'bg-amber-500/10 text-amber-500',Free:'bg-slate-700 text-slate-300'};
+var statusColors={Active:'bg-emerald-500/10 text-emerald-500',Pending:'bg-amber-500/10 text-amber-500',Churned:'bg-red-500/10 text-red-500',Trial:'bg-cyan-500/10 text-cyan-500'};
+var html='';for(var i=0;i<paged.length;i++){var c=paged[i];html+='<tr class="hover:bg-slate-800/30"><td class="px-4 py-3"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center font-semibold text-sm">'+c.company[0]+'</div><span class="font-medium text-sm">'+c.company+'</span></div></td><td class="px-4 py-3"><span class="px-2 py-1 rounded-lg text-xs font-medium '+planColors[c.plan]+'">'+c.plan+'</span></td><td class="px-4 py-3 font-medium">$'+c.mrr.toLocaleString()+'</td><td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium '+statusColors[c.status]+'">'+c.status+'</span></td><td class="px-4 py-3 text-sm text-slate-400">'+c.users+'</td></tr>'}
+document.getElementById('customersTable').innerHTML=html;document.getElementById('customersInfo').textContent='Showing '+(start+1)+'-'+Math.min(start+perPage,filtered.length)+' of '+filtered.length;
+var pag='';if(page>1)pag+='<button onclick="goPage('+(page-1)+')" class="btn btn-secondary text-sm px-3">←</button>';for(var i=1;i<=Math.min(5,total);i++)pag+='<button onclick="goPage('+i+')" class="btn '+(page===i?'btn-primary':'btn-secondary')+' text-sm w-10">'+i+'</button>';if(page<total)pag+='<button onclick="goPage('+(page+1)+')" class="btn btn-secondary text-sm px-3">→</button>';document.getElementById('pagination').innerHTML=pag}
+function sortBy(key){if(sortKey===key)sortDir=sortDir==='asc'?'desc':'asc';else{sortKey=key;sortDir='desc'}renderCustomers()}
+function goPage(p){page=p;renderCustomers()}
+
+function renderReports(type){var filtered=type==='All'?reports:reports.filter(function(r){return r.type===type});var html='';for(var i=0;i<filtered.length;i++){var r=filtered[i];html+='<div class="card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div class="flex items-center gap-4"><div class="p-3 rounded-xl bg-slate-800 text-2xl">📄</div><div><h3 class="font-semibold">'+r.name+'</h3><div class="flex flex-wrap items-center gap-2 mt-1 text-sm text-slate-400"><span>📅 '+r.date+'</span><span>'+r.size+'</span><span class="px-2 py-0.5 rounded-full text-xs bg-emerald-500/10 text-emerald-500">Ready</span></div></div></div><div class="flex items-center gap-2"><button class="btn btn-secondary text-sm p-2">👁</button><button class="btn btn-secondary text-sm p-2">📥</button></div></div>'}document.getElementById('reportsList').innerHTML=html}
+function filterReports(type){var btns=document.querySelectorAll('.report-filter');for(var i=0;i<btns.length;i++){btns[i].classList.remove('btn-primary','active');btns[i].classList.add('btn-secondary')}event.target.classList.remove('btn-secondary');event.target.classList.add('btn-primary','active');renderReports(type)}
+
+function renderChats(){var html='';for(var i=0;i<chats.length;i++){var c=chats[i];html+='<div onclick="selectChat('+c.id+')" class="p-4 cursor-pointer hover:bg-slate-800/50 border-b border-slate-800/50 '+(c.id===1?'bg-slate-800/80':'')+'"><div class="flex items-center gap-3"><div class="relative flex-shrink-0"><div class="w-11 h-11 rounded-full gradient-box flex items-center justify-center text-white font-semibold text-sm">'+c.avatar+'</div>'+(c.online?'<span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900"></span>':'')+'</div><div class="flex-1 min-w-0"><div class="flex justify-between items-center"><span class="font-semibold">'+c.name+'</span><span class="text-xs text-slate-500">'+c.time+'</span></div><p class="text-sm truncate text-slate-400 mt-0.5">'+c.msg+'</p></div>'+(c.unread>0?'<span class="w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center flex-shrink-0">'+c.unread+'</span>':'')+'</div></div>'}document.getElementById('chatList').innerHTML=html}
+function renderMessages(){var html='';for(var i=0;i<messages.length;i++){var m=messages[i];html+='<div class="flex '+(m.from==='me'?'justify-end':'justify-start')+'"><div class="max-w-[75%] px-4 py-3 rounded-2xl '+(m.from==='me'?'gradient-bg text-white':'bg-slate-800')+'"><p>'+m.text+'</p><p class="text-xs mt-1 '+(m.from==='me'?'text-white/70':'text-slate-500')+'">'+m.time+'</p></div></div>'}document.getElementById('chatMessages').innerHTML=html;document.getElementById('chatMessages').scrollTop=99999}
+function selectChat(id){var c=chats.filter(function(x){return x.id===id})[0];document.getElementById('chatHeader').innerHTML='<button onclick="backToList()" class="sm:hidden p-2 rounded-lg hover:bg-slate-800 text-lg mr-1">←</button><div class="w-10 h-10 rounded-full gradient-box flex items-center justify-center text-white font-semibold">'+c.avatar+'</div><div><p class="font-semibold">'+c.name+'</p><p class="text-sm text-slate-400">'+c.role+'</p></div>';document.getElementById('chatListPanel').style.display='none';document.getElementById('chatAreaPanel').style.display='flex';if(window.innerWidth>=640){document.getElementById('chatListPanel').style.display='block'}}
+function sendMsg(){var input=document.getElementById('msgInput');if(input.value.trim()){messages.push({from:'me',text:input.value,time:'Now'});input.value='';renderMessages()}}
+function backToList(){document.getElementById('chatListPanel').style.display='block';document.getElementById('chatAreaPanel').style.display='none'}
+
+function showSettings(section){var panels=['profile','security','billing'];for(var i=0;i<panels.length;i++)document.getElementById('settings-'+panels[i]).style.display='none';document.getElementById('settings-'+section).style.display='block';var btns=document.querySelectorAll('[data-settings]');for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');if(btns[i].dataset.settings===section)btns[i].classList.add('active')}}
+</script>
 </body>
 </html>
